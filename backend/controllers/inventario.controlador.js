@@ -1,4 +1,4 @@
-require("../config/dbInventario");
+require("../config/db");
 const inventarioModel = require("../models/inventario.model");
 
 const controller = {};

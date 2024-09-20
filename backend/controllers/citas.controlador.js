@@ -4,7 +4,7 @@
  */
 
 const CitaModel = require("../models/cita.model");
-require("../config/dbCitas");
+require("../config/db");
 
 const controller = {};
 

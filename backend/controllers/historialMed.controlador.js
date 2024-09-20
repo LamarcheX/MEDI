@@ -1,5 +1,6 @@
 require("../config/db");
 const historialModel = require("../models/historial.model");
+console.log(historialModel)
 
 const controller = {};
 
@@ -24,6 +25,7 @@ const queryByID = async (id) => {
 controller.getHistorial = async (req, res) => {
   
   const historialClinicoBD = await queryAll();
+  console.log(historialClinicoBD)
   res.status(200).json(historialClinicoBD);
 };
 
@@ -37,7 +39,7 @@ controller.getOneHistorial = async (req, res) => {
 
 controller.addHistorial = async (req, res) => {
 
-  
+  console.log(req.body)
   const historial = new historialModel(req.body)
   
 

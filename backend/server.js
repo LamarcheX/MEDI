@@ -8,22 +8,23 @@ const inventarioRutas = require("./routes/inventarioRutas")
 
 require("dotenv").config();
 require("./config/db");
-require("./config/dbInventario");
-require("./config/dbCitas");
+
 
 const app = express();
 
 app.use(cookieParser());
-app.use(express.json())
+//app.use(express.json())
+app.use(express.json({ extended: false }));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // SERVER TEST
 app.get("/", (req, res) => {
   res.send("Hola Mundo SERVIDOR CORRIENDO desde Express");
+  console.log('corriendooo')
 });
 
-app.use(express.json);
+// app.use(express.json);
 
 app.use(citasRouter);
 app.use(historialMedRouter);
