@@ -4,6 +4,7 @@ const cookieParser = require("cookie-parser");
 const citasRouter = require("./routes/citasRutas");
 const historialMedRouter = require("./routes/historialMedRutas");
 const inventarioRutas = require("./routes/inventarioRutas")
+const cors = require("cors")
 
 
 require("dotenv").config();
@@ -15,6 +16,7 @@ const app = express();
 app.use(cookieParser());
 //app.use(express.json())
 app.use(express.json({ extended: false }));
+app.use(cors())
 
 app.use(bodyParser.urlencoded({ extended: true }));
 

@@ -1,6 +1,6 @@
 require("../config/db");
 const historialModel = require("../models/historial.model");
-console.log(historialModel)
+
 
 const controller = {};
 
