@@ -4,12 +4,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger, TabsContentContainer } from '
 import { Label } from '../UI/label.styles';
 import { Input } from '../UI/input.styles';
 import { Button } from '../UI/button.styles';
-import { defualtFormData } from '../../constants/apointment-form.const';
+import { appointmentConsts } from '../../constants/apointment-form.const';
 import ToggleButton from '../UI/toggle-button/toggle-button.component';
 import DatePicker from '../UI/date-picker/date-picker.component';
+import TimePicker from '../UI/time-picker/time-picker.component';
 
 const MedicalAppointmentForm = () => {
-  const [formData, setFormData] = useState(defualtFormData);
+  const [formData, setFormData] = useState(appointmentConsts.defualtFields);
   const [samePatientVisit, setSamePatientVisit] = useState(true);
 
   const {
@@ -102,16 +103,10 @@ const MedicalAppointmentForm = () => {
                   </TabsContentContainer>
                   <TabsContentContainer>
                     <Label htmlFor="hora">Hora</Label>
-                    <Input
-                      id="hora"
-                      type="time"
-                      onChange={handleChange}
-                      disabled={!fecha}
+                    <TimePicker
                       value={hora}
-                      name='hora'
-                      min="08:00"
-                      max="18:00"
-                      step={600}
+                      disabled={!fecha}
+                      onChange={handleChange}
                     />
                   </TabsContentContainer>
                 </CardDateAndTime>

@@ -1,4 +1,4 @@
-export const defualtFormData = {
+export const defualtFields = {
     especialista: '',
     fecha: '',
     hora: '08:00',
@@ -34,3 +34,30 @@ export const defualtFormData = {
     centro_nombre: '',
     centro_ID: 1,
 };
+
+const hours = [
+    { value: '08', label: '08' },
+    { value: '09', label: '09' },
+    { value: '10', label: '10' },
+    { value: '11', label: '11' },
+    { value: '12', label: '12' },
+    { value: '13', label: '01' },
+    { value: '14', label: '02' },
+    { value: '15', label: '03' },
+    { value: '16', label: '04' },
+    { value: '17', label: '05' },
+    { value: '18', label: '06' },
+];
+
+const minutes = [
+    { value: '00', label: '00' },
+    { value: '15', label: '15' },
+    { value: '30', label: '30' },
+    { value: '45', label: '45' },
+];
+
+export const appointmentConsts = {
+    hours,
+    minutes,
+    defualtFields,
+}

@@ -1,18 +1,10 @@
 export const navOptions = [
     {
-        name: "Home",
+        name: "Citas medicas",
         route: "/",
     },
     {
-        name: "Doctores",
-        route: "/doctores",
-    },
-    {
-        name: "Nosotros",
-        route: "/acerca",
-    },
-    {
-        name: "Contactos",
-        route: "/contacto",
-    },
+        name: "Historial clinico",
+        route: "/medical-history",
+    }
 ]
