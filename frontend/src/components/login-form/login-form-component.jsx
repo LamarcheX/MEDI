@@ -1,28 +1,16 @@
 import { useState } from 'react';
-import {
-  LoginFormContainer,
-  LoginFormTitle,
-  FormGroup,
-  Label,
-  Input,
-  Select,
-  Button,
-  ErrorMessage
-} from './login-form-styles';
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '../UI/card.styles';
+import { Tabs, TabsContent, TabsList, TabsTrigger, TabsContentContainer } from '../UI/tabs.styles';
+import { Label } from '../UI/label.styles';
+import { Input } from '../UI/input.styles';
+import { Button } from '../UI/button.styles';
 
 const LoginForm = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
-    nombre: '',
-    primer_apellido: '',
-    segundo_apellido: '',
-    fecha_nacimiento: '',
-    direccion: '',
-    telefono: '',
-    email: '',
+    centro: '',
     contraseña: '',
-    rol: 'paciente',
-    contacto_emergencia: '',
   });
+  const [activeTab, setActiveTab] = useState('login'); 
 
   const handleChange = (e) => {
     setFormData({
@@ -31,128 +19,90 @@ const LoginForm = ({ onSubmit }) => {
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(formData);
   };
 
+  
   return (
-    <LoginFormContainer>
-     <LoginFormTitle>Registro de usuario</LoginFormTitle>
-      <form onSubmit={handleSubmit}>
-        <FormGroup>
-          <Label htmlFor="nombre">Nombre</Label>
-          <Input
-            type="text"
-            name="nombre"
-            placeholder="Nombre"
-            value={formData.nombre}
-            onChange={handleChange}
-            required
-          />
-        </FormGroup>
-        <FormGroup>
-          <Label htmlFor="primer_apellido">Primer Apellido</Label>
-          <Input
-            type="text"
-            name="primer_apellido"
-            placeholder="Primer Apellido"
-            value={formData.primer_apellido}
-            onChange={handleChange}
-            required
-          />
-        </FormGroup>
-        <FormGroup>
-          <Label htmlFor="segundo_apellido">Segundo Apellido</Label>
-          <Input
-            type="text"
-            name="segundo_apellido"
-            placeholder="Segundo Apellido"
-            value={formData.segundo_apellido}
-            onChange={handleChange}
-          />
-        </FormGroup>
-        <FormGroup>
-          <Label htmlFor="fecha_nacimiento">Fecha de Nacimiento</Label>
-          <Input
-            type="date"
-            name="fecha_nacimiento"
-            value={formData.fecha_nacimiento}
-            onChange={handleChange}
-            required
-          />
-        </FormGroup>
-        <FormGroup>
-          <Label htmlFor="direccion">Dirección</Label>
-          <Input
-            type="text"
-            name="direccion"
-            placeholder="Dirección"
-            value={formData.direccion}
-            onChange={handleChange}
-            required
-          />
-        </FormGroup>
-        <FormGroup>
-          <Label htmlFor="telefono">Teléfono</Label>
-          <Input
-            type="tel"
-            name="telefono"
-            placeholder="Teléfono"
-            value={formData.telefono}
-            onChange={handleChange}
-            required
-          />
-        </FormGroup>
-        <FormGroup>
-          <Label htmlFor="email">Correo</Label>
-          <Input
-            type="email"
-            name="email"
-            placeholder="Correo"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </FormGroup>
-        <FormGroup>
-          <Label htmlFor="contraseña">Contraseña</Label>
-          <Input
-            type="password"
-            name="contraseña"
-            placeholder="Contraseña"
-            value={formData.contraseña}
-            onChange={handleChange}
-            required
-          />
-        </FormGroup>
-        <FormGroup>
-          <Label htmlFor="rol">Rol</Label>
-          <Select
-            name="rol"
-            value={formData.rol}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Seleccione un rol</option>
-            <option value="doctor">Doctor</option>
-            <option value="administrador">Administrador</option>
-            <option value="paciente">Paciente</option>
-          </Select>
-        </FormGroup>
-        <FormGroup>
-          <Label htmlFor="contacto_emergencia">Contacto de Emergencia</Label>
-          <Input
-            type="text"
-            name="contacto_emergencia"
-            placeholder="Contacto de Emergencia"
-            value={formData.contacto_emergencia}
-            onChange={handleChange}
-          />
-        </FormGroup>
-        <Button type="submit">Crear Cuenta</Button>
-      </form>
-    </LoginFormContainer>
+    <div style={{ maxWidth: '400px', margin: '0 auto', padding: '16px' }}>
+      <Card>
+        <CardHeader>
+          <CardTitle>Bienvenido</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Tabs defaultValue="login">
+            <TabsList>
+              <TabsTrigger value="login" onClick={() => setActiveTab('login')}>Iniciar Sesión</TabsTrigger>
+              <TabsTrigger value="register" onClick={() => setActiveTab('register')}>Registro</TabsTrigger>
+            </TabsList>
+
+            {/* Pestaña de Iniciar Sesión */}
+            <TabsContent value="login">
+              <form onSubmit={handleSubmit}>
+                <TabsContentContainer>
+                  <Label htmlFor="centro">Centro</Label>
+                  <Input
+                    type="text"
+                    name="centro"
+                    placeholder="Centro"
+                    value={formData.centro}
+                    onChange={handleChange}
+                    required
+                  />
+                </TabsContentContainer>
+                <TabsContentContainer>
+                  <Label htmlFor="contraseña">Contraseña</Label>
+                  <Input
+                    type="password"
+                    name="contraseña"
+                    placeholder="Contraseña"
+                    value={formData.contraseña}
+                    onChange={handleChange}
+                    required
+                  />
+                </TabsContentContainer>
+                <CardFooter>
+                  <Button type="submit">Iniciar Sesión</Button>
+                </CardFooter>
+              </form>
+            </TabsContent>
+
+            {/* Pestaña de Registro */}
+            <TabsContent value="register">
+              <form onSubmit={handleSubmit}>
+                <TabsContentContainer>
+                  <Label htmlFor="centro">Centro/Hospital</Label>
+                  <Input
+                    type="text"
+                    name="centro"
+                    placeholder="Centro"
+                    value={formData.centro}
+                    onChange={handleChange}
+                    required
+                  />
+                </TabsContentContainer>
+                <TabsContentContainer>
+                  <Label htmlFor="contraseña">Contraseña</Label>
+                  <Input
+                    type="password"
+                    name="contraseña"
+                    placeholder="Contraseña"
+                    value={formData.contraseña}
+                    onChange={handleChange}
+                    required
+                  />
+                </TabsContentContainer>
+                <CardFooter>
+                  <Button type="submit">Crear Cuenta</Button>
+                </CardFooter>
+              </form>
+            </TabsContent>
+          </Tabs>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 
