@@ -5,6 +5,7 @@ import {
     NavigationItem,
     NavigationLogo,
     NavigationList,
+    NavigationLogoImage,
 } from "./navigation.styles.jsx";
 import { navOptions } from "../../constants/navigation.const.js";
 import Button from "../../components/UI/button/button.component.jsx";
@@ -20,9 +21,7 @@ const Navigation = () => {
         <Fragment>
             <NavigationContainer>
                 <NavigationLogo>
-                    <h1>🧑🏻‍⚕️ </h1>
-                    <h1>MEDI</h1>
-                    
+                    <NavigationLogoImage src="https://pastoraldelasaludrd.com/images/Logos/PASTORAL1.png" />
                 </NavigationLogo>
                 <NavigationList>
                     {navOptions.map((option, index) => (

@@ -23,9 +23,16 @@ export const NavigationLogo = styled(Link)`
     }
 `;
 
+export const NavigationLogoImage = styled.img`
+    width: 370px;
+    height: 40px;
+    aspect-ratio: 370 / 40;
+`;
+
 export const NavigationList = styled.ul`
     display: flex;
     list-style: none;
+    padding: 0;
 `;
 
 const activeStyle = css`
