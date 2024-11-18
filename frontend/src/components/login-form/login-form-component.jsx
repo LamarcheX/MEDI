@@ -5,7 +5,7 @@ import { Label } from '../UI/label.styles';
 import { Input } from '../UI/input.styles';
 import { Button } from '../UI/button.styles';
 
-const LoginForm = ({ onSubmit }) => {
+const LoginForm = ({ onLogin, onRegister }) => {
   const [formData, setFormData] = useState({
     centro: '',
     contraseña: '',
@@ -21,10 +21,13 @@ const LoginForm = ({ onSubmit }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(formData);
+    if (activeTab === 'login') {
+      onLogin(formData); 
+    } else if (activeTab === 'register') {
+      onRegister(formData); 
+    }
   };
 
-  
   return (
     <div style={{ maxWidth: '400px', margin: '0 auto', padding: '16px' }}>
       <Card>
@@ -34,8 +37,12 @@ const LoginForm = ({ onSubmit }) => {
         <CardContent>
           <Tabs defaultValue="login">
             <TabsList>
-              <TabsTrigger value="login" onClick={() => setActiveTab('login')}>Iniciar Sesión</TabsTrigger>
-              <TabsTrigger value="register" onClick={() => setActiveTab('register')}>Registro</TabsTrigger>
+              <TabsTrigger value="login" onClick={() => setActiveTab('login')}>
+                Iniciar Sesión
+              </TabsTrigger>
+              <TabsTrigger value="register" onClick={() => setActiveTab('register')}>
+                Registro
+              </TabsTrigger>
             </TabsList>
 
             {/* Pestaña de Iniciar Sesión */}

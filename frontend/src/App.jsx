@@ -8,7 +8,7 @@ import HistoriaClinica from './components/medical-history/medical-history.compon
 
 function App() {
 
-  const isAuthenticated = false;
+  const isAuthenticated = true;
 
   return (
     <Routes>
