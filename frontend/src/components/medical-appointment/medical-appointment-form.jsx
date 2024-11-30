@@ -8,6 +8,7 @@ import { appointmentConsts } from '../../constants/apointment-form.const';
 import ToggleButton from '../UI/toggle-button/toggle-button.component';
 import DatePicker from '../UI/date-picker/date-picker.component';
 import TimePicker from '../UI/time-picker/time-picker.component';
+import PreviousAppointments from '../medical-appointment-history/medical-apointment-history';
 
 const MedicalAppointmentForm = () => {
   const [formData, setFormData] = useState(appointmentConsts.defualtFields);
@@ -324,7 +325,10 @@ const MedicalAppointmentForm = () => {
           </CardFooter>
         </CardContent>
       </Card>
+      
+      <PreviousAppointments/>
     </div>
+    
   );
 };
 
