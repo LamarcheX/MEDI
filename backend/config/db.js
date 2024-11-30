@@ -9,7 +9,7 @@ require("dotenv").config();
  * **Nota:** En el archivo .env, debes configurar las variables de entorno de
  * la base de datos.
  */
-const url = process.env.LOCAL_URL;
+const url = process.env.ATLAS_URL;
 
 try {
   mongoose.connect(url);
