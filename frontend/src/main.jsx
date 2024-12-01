@@ -1,4 +1,4 @@
-import { StrictMode } from 'react'
+// import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { PersistGate } from 'redux-persist/integration/react'
 import { Provider } from 'react-redux'
@@ -11,7 +11,7 @@ import { theme } from './theme.js'
 import { persistor, store } from './store/store.js'
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+  <>
     <StyleSheetManager shouldForwardProp={(prop) => !StylesProps.includes(prop)}>
       <ThemeProvider theme={theme}>
         <Provider store={store}>
@@ -23,5 +23,5 @@ createRoot(document.getElementById('root')).render(
         </Provider>
       </ThemeProvider>
     </StyleSheetManager>
-  </StrictMode>,
+  </>,
 )

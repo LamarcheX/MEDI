@@ -1,0 +1,176 @@
+[
+    {
+        "usuario": "cdssmr",
+        "contraseña": "Reina.84",
+        "nombre": "CENTRO DE SALUD PARROQUIAL SANTA MARIA REINA",
+        "role": "user"
+    },
+    {
+        "usuario": "cpuye",
+        "contraseña": "Union.84",
+        "nombre": "CENTRO PARROQUIAL UNION Y ESPERANZA",
+        "role": "user"
+    },
+    {
+        "usuario": "admin",
+        "contraseña": "Pastoral.01",
+        "nombre": "ADMINISTRADOR",
+        "role": "admin"
+    },
+    {
+        "usuario": "cdssga",
+        "contraseña": "Gabriel.0415",
+        "nombre": "CENTRO DE SALUD SAN GABRIEL ARCANGEL",
+        "role": "user"
+    },
+    {
+        "usuario": "dismele",
+        "contraseña": "Esperilla.52",
+        "nombre": "DISPENSARIO MEDICO LA ESPERILLA",
+        "role": "user"
+    },
+    {
+        "usuario": "dispama",
+        "contraseña": "Mariaux.54",
+        "nombre": "DISPENSARIO PARROQUIAL MARIA AUXILIADORA",
+        "role": "user"
+    },
+    {
+        "usuario": "dmnsal",
+        "contraseña": "Alatina.12",
+        "nombre": "DISPENSARIO MEDICO NUESTRA SEÑORA DE AMERICA LATINA",
+        "role": "user"
+    },
+    {
+        "usuario": "dmamico",
+        "contraseña": "Amico.73",
+        "nombre": "DISPENSARIO MEDICO AMICO",
+        "role": "user"
+    },
+    {
+        "usuario": "dmed",
+        "contraseña": "EsmeraldoD.34",
+        "nombre": "DISPENSARIO MEDICO DON ESMERALDO DIAZ",
+        "role": "user"
+    },
+    {
+        "usuario": "dmce",
+        "contraseña": "Emaus.23",
+        "nombre": "DISPENSARIO MEDICO CASA EMAUS",
+        "role": "user"
+    },
+    {
+        "usuario": "dmco",
+        "contraseña": "Cr.obrero32",
+        "nombre": "DISPENSARIO MEDICO CRISTO OBRERO",
+        "role": "user"
+    },
+    {
+        "usuario": "dmalm",
+        "contraseña": "Alatinam.57",
+        "nombre": "DISPENSARIO MEDICO NTRA. SRA. DE AMERICA LATINA EL MILLONCITO",
+        "role": "user"
+    },
+    {
+        "usuario": "disamalv",
+        "contraseña": "Sanmartin.88",
+        "nombre": "DISPENSARIO SAN MARTIN DISAMA",
+        "role": "user"
+    },
+    {
+        "usuario": "dmclv",
+        "contraseña": "Mcarmen.5623",
+        "nombre": "DISPENSARIO MEDICO MADRE CARMEN LA VEGA",
+        "role": "user"
+    },
+    {
+        "usuario": "dmpsb",
+        "contraseña": "Pastoralb.662",
+        "nombre": "DISPENSARIO PARROQUIAL PASTORAL DE SALUD BAYAGUANA",
+        "role": "user"
+    },
+    {
+        "usuario": "cdalimalv",
+        "contraseña": "Lalima.108",
+        "nombre": "CENTRO DE ATENCION PRIMARIA LA LIMA",
+        "role": "user"
+    },
+    {
+        "usuario": "dmes",
+        "contraseña": "Esanto.43",
+        "nombre": "DISPENSARIO MEDICO PARROQUIA ESPIRITU SANTO",
+        "role": "user"
+    },
+    {
+        "usuario": "dmpscm",
+        "contraseña": "Scristo.574",
+        "nombre": "DISPENSARIO MEDICO PARROQUIAL SANTO CRISTO DE LOS MILAGROS",
+        "role": "user"
+    },
+    {
+        "usuario": "dmppf",
+        "contraseña": "P.fantino87",
+        "nombre": "DISPENSARIO MEDICO PARROQUIAL PADRE FANTINO",
+        "role": "user"
+    },
+    {
+        "usuario": "dmsmlv",
+        "contraseña": "Siervasm.67",
+        "nombre": "DISPENSARIO MEDICO NUESTRA SEÑORA DE LA SALUD SIERVAS DE MARIA (LA VEGA)",
+        "role": "user"
+    },
+    {
+        "usuario": "dmnslourdes",
+        "contraseña": "Lourdes.2005",
+        "nombre": "DISPENSARIO NUESTRA SEÑORA DE LOURDES",
+        "role": "user2"
+    },
+    {
+        "usuario": "dmnsr",
+        "contraseña": "Rosario.73",
+        "nombre": "DISPENSARIO PARROQUIAL NUESTRA SEÑORA DEL ROSARIO",
+        "role": "user"
+    },
+    {
+        "usuario": "cdscj",
+        "contraseña": "CJesus.542",
+        "nombre": "CENTRO DE SALUD CORAZON DE JESUS",
+        "role": "user"
+    },
+    {
+        "usuario": "dmfsv",
+        "contraseña": "Sanvalero.512",
+        "nombre": "FUNDACION DOMINICANA SAN VALERO",
+        "role": "user"
+    },
+    {
+        "usuario": "dmsap",
+        "contraseña": "Padua.312",
+        "nombre": "DISPENSARIO SAN ANTONIO DE PADUA (MONTE PLATA)",
+        "role": "user"
+    },
+    {
+        "usuario": "cpstv",
+        "contraseña": "Villanueva.784",
+        "nombre": "CENTRO PARROQUIAL SANTO TOMAS DE VILLANUEVA",
+        "role": "user"
+    },
+    {
+        "usuario": "prueba",
+        "contraseña": "prueba.01",
+        "nombre": "CENTRO DE SALUD DE PRUEBA",
+        "role": "user"
+    },
+    {
+        "usuario": "dmnsalt",
+        "contraseña": "Altagracia.702",
+        "nombre": "DISPENSARIO MEDICO NUESTRA SEÑORA DE LA ALTAGRACIA",
+        "role": "user"
+    },
+    {
+        "usuario": "dmnsg",
+        "contraseña": "Dm.guadalupe321",
+        "nombre": "DISPENSARIO NTRA. SRA. DE GUADALUPE",
+        "role": "user"
+    }
+]

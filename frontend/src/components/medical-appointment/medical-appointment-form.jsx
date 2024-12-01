@@ -72,12 +72,11 @@ const MedicalAppointmentForm = () => {
               <TabsTrigger value="billing">Facturación</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="appointment">
+            <TabsContent value="appointment" columns={1}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 <TabsContentContainer>
                   <Label htmlFor="centro_nombre">Nombre del centro</Label>
                   <Input
-                    id="centro_nombre"
                     placeholder="Nombre del centro"
                     onChange={handleChange}
                     value={centro_nombre}
@@ -87,7 +86,6 @@ const MedicalAppointmentForm = () => {
                 <TabsContentContainer>
                   <Label htmlFor="especialista">Doctor Especialista</Label>
                   <Input
-                    id="especialista"
                     placeholder="Nombre del especialista"
                     onChange={handleChange}
                     value={especialista}
@@ -114,7 +112,6 @@ const MedicalAppointmentForm = () => {
                 <TabsContentContainer>
                   <Label htmlFor="tipo_servicio">Tipo de Servicio</Label>
                   <Input
-                    id="tipo_servicio"
                     placeholder="Tipo de servicio"
                     onChange={handleChange}
                     value={tipo_servicio}
@@ -124,12 +121,11 @@ const MedicalAppointmentForm = () => {
               </div>
             </TabsContent>
 
-            <TabsContent value="patient">
+            <TabsContent value="patient" columns={1}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 <TabsContentContainer>
                   <Label htmlFor="paciente_nombre">Nombre completo</Label>
                   <Input
-                    id="paciente_nombre"
                     placeholder="Nombre completo"
                     onChange={handleChange}
                     value={paciente_nombre}
@@ -139,7 +135,6 @@ const MedicalAppointmentForm = () => {
                 <TabsContentContainer>
                   <Label htmlFor="paciente_edad">Edad</Label>
                   <Input
-                    id="paciente_edad"
                     type="number"
                     placeholder="Edad"
                     onChange={handleChange}
@@ -150,7 +145,6 @@ const MedicalAppointmentForm = () => {
                 <TabsContentContainer>
                   <Label htmlFor="paciente_nacionalidad">Nacionalidad</Label>
                   <Input
-                    id="paciente_nacionalidad"
                     placeholder="Nacionalidad"
                     onChange={handleChange}
                     value={paciente_nacionalidad}
@@ -160,7 +154,6 @@ const MedicalAppointmentForm = () => {
                 <TabsContentContainer>
                   <Label htmlFor="paciente_cedula">Numero de cédula</Label>
                   <Input
-                    id="paciente_cedula"
                     placeholder="Numero de cédula"
                     onChange={handleChange}
                     value={paciente_cedula}
@@ -170,7 +163,6 @@ const MedicalAppointmentForm = () => {
                 <TabsContentContainer>
                   <Label htmlFor="paciente_genero">Genero</Label>
                   <Input
-                    id="paciente_genero"
                     placeholder="Genero del paciente"
                     onChange={handleChange}
                     value={paciente_genero}
@@ -180,7 +172,6 @@ const MedicalAppointmentForm = () => {
                 <TabsContentContainer>
                   <Label htmlFor="paciente_direccion">Dirección del paciente</Label>
                   <Input
-                    id="paciente_direccion"
                     placeholder="Dirección del paciente"
                     onChange={handleChange}
                     value={paciente_direccion}
@@ -192,7 +183,6 @@ const MedicalAppointmentForm = () => {
                   <ToggleButton
                     onChange={handleCheckboxChange}
                     isToggled={samePatientVisit}
-                    id="same_patient_visit"
                     name="same_patient_visit"
                   />
                 </TabsContentContainer>
@@ -201,7 +191,6 @@ const MedicalAppointmentForm = () => {
                     <TabsContentContainer>
                       <Label htmlFor="solicitante_nombre">Nombre del solicitante</Label>
                       <Input
-                        id="solicitante_nombre"
                         placeholder="Nombre del solicitante"
                         onChange={handleChange}
                         value={solicitante_nombre}
@@ -211,7 +200,6 @@ const MedicalAppointmentForm = () => {
                     <TabsContentContainer>
                       <Label htmlFor="solicitante_apellido">Aprellido del solicitante</Label>
                       <Input
-                        id="solicitante_apellido"
                         placeholder="Aprellido del solicitante"
                         onChange={handleChange}
                         value={solicitante_apellido}
@@ -223,12 +211,11 @@ const MedicalAppointmentForm = () => {
               </div>
             </TabsContent>
 
-            <TabsContent value="diagnosis">
+            <TabsContent value="diagnosis" columns={1}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 <TabsContentContainer>
                   <Label htmlFor="categoria_diagnostico">Codigo de diagnóstico</Label>
                   <Input
-                    id="categoria_diagnostico"
                     placeholder="Codigo de diagnóstico"
                     onChange={handleChange}
                     value={categoria_diagnostico}
@@ -238,7 +225,6 @@ const MedicalAppointmentForm = () => {
                 <TabsContentContainer>
                   <Label htmlFor="descripcion_diagnostico">Descripcion del diagnóstico</Label>
                   <Input
-                    id="descripcion_diagnostico"
                     placeholder="Descripcion del diagnóstico"
                     onChange={handleChange}
                     value={descripcion_diagnostico}
@@ -248,7 +234,6 @@ const MedicalAppointmentForm = () => {
                 <TabsContentContainer>
                   <Label htmlFor="medicamento">Medicamentos</Label>
                   <Input
-                    id="medicamento"
                     placeholder="Medicamentos"
                     onChange={handleChange}
                     value={medicamento}
@@ -258,7 +243,6 @@ const MedicalAppointmentForm = () => {
                 <TabsContentContainer>
                   <Label htmlFor="nombre_dispensario">Nombre de dispensario</Label>
                   <Input
-                    id="nombre_dispensario"
                     placeholder="Nombre de dispensario"
                     onChange={handleChange}
                     value={nombre_dispensario}
@@ -268,12 +252,11 @@ const MedicalAppointmentForm = () => {
               </div>
             </TabsContent>
 
-            <TabsContent value="billing">
+            <TabsContent value="billing" columns={1}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 <TabsContentContainer>
                   <Label htmlFor="afiliacion_ars">Afiliación ARS</Label>
                   <Input
-                    id="afiliacion_ars"
                     placeholder="¿Cual es su ARS?"
                     onChange={handleChange}
                     value={afiliacion_ars}
@@ -283,7 +266,6 @@ const MedicalAppointmentForm = () => {
                 <TabsContentContainer>
                   <Label htmlFor="nss_o_contrato">Contrato</Label>
                   <Input
-                    id="nss_o_contrato"
                     placeholder="Numero de contrato"
                     onChange={handleChange}
                     value={nss_o_contrato}
@@ -293,7 +275,6 @@ const MedicalAppointmentForm = () => {
                 <TabsContentContainer>
                   <Label htmlFor="total_reclamaciones">Total reclamado</Label>
                   <Input
-                    id="total_reclamaciones"
                     type="number"
                     placeholder="0.00"
                     onChange={handleChange}
@@ -304,7 +285,6 @@ const MedicalAppointmentForm = () => {
                 <TabsContentContainer>
                   <Label htmlFor="valor_reclamado">Monto a pagar</Label>
                   <Input
-                    id="valor_reclamado"
                     type="number"
                     placeholder="0.00"
                     onChange={handleChange}
@@ -325,10 +305,8 @@ const MedicalAppointmentForm = () => {
           </CardFooter>
         </CardContent>
       </Card>
-      
       <PreviousAppointments/>
     </div>
-    
   );
 };
 
