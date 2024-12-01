@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export const Card = styled.div`
   background-color: #ffffff;
+  margin: 0.5rem;
   color: #1c1c1c;
   border-radius: 8px;
   border: 1px solid #e6e6e6;
@@ -26,6 +27,7 @@ export const CardHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 16px;
 
   &.dark {
     background-color: #333;
@@ -56,6 +58,7 @@ export const CardFooter = styled.div`
   display: flex;
   justify-content: flex-end;
   gap: 8px;
+  margin: 0 24px 24px 0;
 
   &.dark {
     background-color: #333;

@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Card, CardHeader, CardContent, CardTitle } from "../UI/card.styles";
 import { Input } from "../UI/input.styles";
-import { Button } from "../UI/button.styles";
 import Modal from "../UI/modal/modal.component";
 import styled from "styled-components";
 import moment from "moment";

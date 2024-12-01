@@ -6,7 +6,7 @@ export const Tabs = TabsPrimitive.Root;
 export const TabsList = styled(TabsPrimitive.List)`
     display: grid;
     gap: 0.3rem;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(${props => props.columns ? props.columns : 4}, 1fr);
     background-color: #f1f1f1;
     padding: 0.3rem;
     border-radius: 8px;
@@ -31,10 +31,18 @@ export const TabsTrigger = styled(TabsPrimitive.Trigger)`
 
 export const TabsContent = styled(TabsPrimitive.Content)`
     margin-top: 16px;
+    display: grid;
+    grid-template-columns: repeat(${props => props.columns ? props.columns : 2}, 1fr);
+`;
+
+export const TabsColumnItem = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 10px;
 `;
 
 export const TabsContentContainer = styled.div`
     width: 100%;
-    overflow: hidden;
     position: relative;
 `;

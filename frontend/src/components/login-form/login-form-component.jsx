@@ -4,13 +4,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger, TabsContentContainer } from '
 import { Label } from '../UI/label.styles';
 import { Input } from '../UI/input.styles';
 import { Button } from '../UI/button.styles';
+import { useDispatch } from 'react-redux';
+import { loginCenterStart } from '../../store/center/center.action';
 
-const LoginForm = ({ onLogin, onRegister }) => {
+const LoginForm = () => {
   const [formData, setFormData] = useState({
-    centro: '',
+    usuario: '',
     contraseña: '',
   });
-  const [activeTab, setActiveTab] = useState('login'); 
+
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     setFormData({
@@ -19,14 +22,16 @@ const LoginForm = ({ onLogin, onRegister }) => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleLoginSubmit = (e) => {
     e.preventDefault();
-    if (activeTab === 'login') {
-      onLogin(formData); 
-    } else if (activeTab === 'register') {
-      onRegister(formData); 
-    }
+    const { usuario, contraseña } = formData;
+    dispatch(loginCenterStart({ usuario, contraseña }));
   };
+
+  const handleRegisterSubmit = (e) => {
+    e.preventDefault();
+    dispatch();
+  }
 
   return (
     <div style={{ maxWidth: '400px', margin: '0 auto', padding: '16px' }}>
@@ -36,25 +41,21 @@ const LoginForm = ({ onLogin, onRegister }) => {
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="login">
-            <TabsList>
-              <TabsTrigger value="login" onClick={() => setActiveTab('login')}>
-                Iniciar Sesión
-              </TabsTrigger>
-              <TabsTrigger value="register" onClick={() => setActiveTab('register')}>
-                Registro
-              </TabsTrigger>
+            <TabsList columns={2}>
+              <TabsTrigger value="login">Iniciar Sesión</TabsTrigger>
+              <TabsTrigger value="register">Registro</TabsTrigger>
             </TabsList>
 
             {/* Pestaña de Iniciar Sesión */}
-            <TabsContent value="login">
-              <form onSubmit={handleSubmit}>
+            <TabsContent value="login" columns={1}>
                 <TabsContentContainer>
-                  <Label htmlFor="centro">Centro</Label>
+                  <Label htmlFor="usuario">Centro</Label>
                   <Input
+                    id='usuario'
                     type="text"
-                    name="centro"
+                    name="usuario"
                     placeholder="Centro"
-                    value={formData.centro}
+                    value={formData.usuario}
                     onChange={handleChange}
                     required
                   />
@@ -62,6 +63,7 @@ const LoginForm = ({ onLogin, onRegister }) => {
                 <TabsContentContainer>
                   <Label htmlFor="contraseña">Contraseña</Label>
                   <Input
+                    id='contraseña'
                     type="password"
                     name="contraseña"
                     placeholder="Contraseña"
@@ -71,21 +73,19 @@ const LoginForm = ({ onLogin, onRegister }) => {
                   />
                 </TabsContentContainer>
                 <CardFooter>
-                  <Button type="submit">Iniciar Sesión</Button>
+                  <Button onClick={handleLoginSubmit}>Iniciar Sesión</Button>
                 </CardFooter>
-              </form>
             </TabsContent>
 
             {/* Pestaña de Registro */}
-            <TabsContent value="register">
-              <form onSubmit={handleSubmit}>
+            <TabsContent value="register" columns={1}>
                 <TabsContentContainer>
                   <Label htmlFor="centro">Centro/Hospital</Label>
                   <Input
                     type="text"
                     name="centro"
                     placeholder="Centro"
-                    value={formData.centro}
+                    value={formData.usuario}
                     onChange={handleChange}
                     required
                   />
@@ -102,9 +102,8 @@ const LoginForm = ({ onLogin, onRegister }) => {
                   />
                 </TabsContentContainer>
                 <CardFooter>
-                  <Button type="submit">Crear Cuenta</Button>
+                  <Button onClick={handleRegisterSubmit}>Crear Cuenta</Button>
                 </CardFooter>
-              </form>
             </TabsContent>
           </Tabs>
         </CardContent>

@@ -1,6 +1,7 @@
 import styled from "styled-components";
+import * as Switch from "@radix-ui/react-switch";
 
-export const InputWrapper = styled.label`
+export const InputWrapper = styled.div`
     position: relative;
     display: flex;
     align-items: center;
@@ -54,5 +55,39 @@ export const Slider = styled.span`
 
     &:active:before {
         width: 28px;
+    }
+`;
+
+export const SwitchRoot = styled(Switch.Root)`
+    all: unset;
+    width: 45px;
+    height: 22.5px;
+    border-radius: 100px;
+    background-color: #bfbfbf;
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.2s;
+
+    &[data-state="checked"] {
+        background-color: hsl(220.9 39.3% 11%);
+    }
+`;
+
+export const SwitchThumb = styled(Switch.Thumb)`
+    display: flex;
+    position: absolute;
+    width: 18.9px;
+    height: 18.9px;
+    border-radius: 50%;
+    background-color: #fff;
+    box-shadow: 0 2px 4px 0 rgba(0, 35, 11, 0.2);
+    transition: transform 0.2s, width 0.2s;
+
+    transform: translateX(2px);
+    
+    &[data-state="checked"] {
+        transform: translateX(22.5px);
     }
 `;
