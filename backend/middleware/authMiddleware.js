@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const User = require("../models/usuario.model");
+const Centro = require("../models/centro.model");
 require("../config/db");
 
 /**
@@ -10,24 +10,32 @@ require("../config/db");
  * @param {Function} next - Función para pasar al siguiente middleware.
  * @returns {Promise<void>} - Devuelve una promesa que resuelve en una respuesta HTTP con un mensaje de error o una redirección a la página de inicio de sesión si la sesión no está activada.
  */
+
+const jwtSecret = process.env.JWT_SECRET;
+
 const authMiddleware = async (req, res, next) => {
   try {
-    const token = req.headers.authorization.split(" ")[1];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = await User.findById(decoded.id);
-
-    if (!req.user) {
-      return res.status(401).json({ error: "No se encontró el usuario" });
+    const token = req.header('Authorization')?.replace('Bearer ', '');
+    if (!token) {
+      throw new Error('Token no proporcionado');
     }
 
-    if (req.user.active === false) {
-      return res.status(401).json({ error: "La sesión ha expirado" });
+    const decoded = jwt.verify(token, jwtSecret);
+
+    const center = await Centro.findOne({
+      _id: decoded._id,
+      'tokens.token': token
+    });
+
+    if (!center) {
+      throw new Error('No se encontró el usuario');
     }
 
+    req.token = token;
+    req.center = center;
     next();
   } catch (error) {
-    console.error("Error al verificar la autenticación:", error);
-    res.status(500).json({ error: "Error al verificar la autenticación" });
+    res.status(401).send({ error: 'No estás autenticado', details: error.message });
   }
 };
 
@@ -45,3 +53,4 @@ const setSession = (req, res, next) => {
 };
 
 module.exports = authMiddleware;
+

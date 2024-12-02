@@ -1,81 +1,84 @@
 require("../config/db");
 const historialModel = require("../models/historial.model");
 
-const controller = {};
-
-const queryAll = async () => {
+const getHistorial = async (req, res) => {
   try {
-    return await historialModel.find();
+    const historialClinicoBD = await historialModel.find();
+    res.status(200).send(historialClinicoBD);
   } catch (error) {
-    console.log(error);
-    return [];
+    res.status(500).send({ error: error.message });
   }
 };
 
-const queryByID = async (id) => {
+const getHistorialPorCentro = async (req, res) => {
+  const idCentro = req.params.idCentro;
   try {
-    return await historialModel.findById(id);
+    const historialClinicoBD = await historialModel.find({ idCentro });
+    res.status(200).send(historialClinicoBD);
   } catch (error) {
-    console.log(error);
-    return null;
+    res.status(500).send({ error: error.message });
   }
 };
 
-controller.getHistorial = async (req, res) => {
-  
-  const historialClinicoBD = await queryAll();
-  res.status(200).json(historialClinicoBD);
-};
-
-
-controller.getOneHistorial = async (req, res) => {
-  
-  const id = req.params.id
-  const historialClinicoBD = await queryByID(id);
-  res.status(200).json(historialClinicoBD);
-};
-
-controller.addHistorial = async (req, res) => {
-
-  
-  const historial = new historialModel(req.body)
-  
-
+const getOneHistorial = async (req, res) => {
+  const id = req.params.id;
   try {
-    await historial.save() 
-    res.status(201).json(historial)
+    const historialClinicoBD = await historialModel.findById(id);
+    if (!historialClinicoBD) {
+      return res.status(404).send({ message: "Historial no encontrado" });
+    }
+    res.status(200).send(historialClinicoBD);
   } catch (error) {
-    res.status(500).send({error:error})
+    res.status(500).send({ error: error.message });
   }
 };
 
-controller.updateHistorial = async (req, res) => {
-  
+const addHistorial = async (req, res) => {
+  const historial = new historialModel(req.body);
 
+  try {
+    await historial.save();
+    res.status(201).send(historial);
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
+};
+
+const updateHistorial = async (req, res) => {
   try {
     const pacienteActualizado = await historialModel.findByIdAndUpdate(
-      req.params.id, 
-      req.body, 
+      req.params.id,
+      req.body,
       { new: true, runValidators: true }
     );
-    
+
     if (!pacienteActualizado) {
-      return res.status(404).json({ message: 'Paciente no encontrado' });
+      return res.status(404).send({ message: "Paciente no encontrado" });
     }
-    
-    res.json(pacienteActualizado);
+
+    res.status(200).send(pacienteActualizado);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).send({ message: error.message });
   }
 };
 
-controller.deleteHistorial = async (req, res) => {
+const deleteHistorial = async (req, res) => {
   try {
     const historiaEliminada = await historialModel.findByIdAndDelete(req.params.id);
-    if (!historiaEliminada) return res.status(404).json({ message: 'Historia no encontrada' });
-    res.status(200).json({ message: 'Historia eliminada con éxito' });
+    if (!historiaEliminada) {
+      return res.status(404).send({ message: "Historia no encontrada" });
+    }
+    res.status(200).send({ message: "Historia eliminada con éxito" });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).send({ message: error.message });
   }
 };
-module.exports = controller;
+
+module.exports = {
+  getHistorial,
+  getHistorialPorCentro,
+  getOneHistorial,
+  addHistorial,
+  updateHistorial,
+  deleteHistorial,
+};

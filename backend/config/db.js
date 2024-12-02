@@ -1,9 +1,6 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-
-
-
 /**
  * Configuración de la conexión a la base de datos.
  * **Nota:** En el archivo .env, debes configurar las variables de entorno de
