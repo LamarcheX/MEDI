@@ -9,13 +9,17 @@ import ToggleButton from '../UI/toggle-button/toggle-button.component';
 import DatePicker from '../UI/date-picker/date-picker.component';
 import TimePicker from '../UI/time-picker/time-picker.component';
 import PreviousAppointments from '../medical-appointment-history/medical-apointment-history';
+import { useSelector } from 'react-redux';
+import { selectCurrentCenter } from '../../store/center/center.selector';
 
 const MedicalAppointmentForm = () => {
   const [formData, setFormData] = useState(appointmentConsts.defualtFields);
   const [samePatientVisit, setSamePatientVisit] = useState(true);
+  const center = useSelector(selectCurrentCenter);
+
+  const centro_nombre = formData.centro_nombre || center?.nombre || '';
 
   const {
-    centro_nombre,
     especialista,
     fecha,
     hora,
@@ -81,6 +85,7 @@ const MedicalAppointmentForm = () => {
                     onChange={handleChange}
                     value={centro_nombre}
                     name='centro_nombre'
+                    disabled
                   />
                 </TabsContentContainer>
                 <TabsContentContainer>
