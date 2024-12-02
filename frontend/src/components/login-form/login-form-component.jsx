@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '../UI/card.styles';
 import { Tabs, TabsContent, TabsList, TabsTrigger, TabsContentContainer } from '../UI/tabs.styles';
 import { Label } from '../UI/label.styles';
 import { Input } from '../UI/input.styles';
 import { Button } from '../UI/button.styles';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { loginCenterStart } from '../../store/center/center.action';
+import { useNavigate } from 'react-router-dom';
+import { selectCurrentCenter } from '../../store/center/center.selector';
 
 const LoginForm = () => {
   const [formData, setFormData] = useState({
@@ -14,6 +16,13 @@ const LoginForm = () => {
   });
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const center = useSelector(selectCurrentCenter);
+
+  useEffect(() => {
+    center && navigate('/');
+  }, [center]);
+
 
   const handleChange = (e) => {
     setFormData({
@@ -26,6 +35,7 @@ const LoginForm = () => {
     e.preventDefault();
     const { usuario, contraseña } = formData;
     dispatch(loginCenterStart({ usuario, contraseña }));
+    navigate("/");
   };
 
   const handleRegisterSubmit = (e) => {

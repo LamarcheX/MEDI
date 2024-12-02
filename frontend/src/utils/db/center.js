@@ -6,9 +6,10 @@ export const getCurrentCenter = async () => {
     if (!token) throw new Error("No token found");
 
     try {
-        const response = await api.get("/api/centros/aqui");
+        const response = await api.get("/api/centros/me");
         return response.data;
     } catch (error) {
+        console.error("Error fetching current center:", error.response?.data || error.message);
         throw new Error("Error while fetching current center", error);
     }
 };
