@@ -1,10 +1,12 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-const collection = process.env.DB_COLLECTION;
-const dbURI = process.env.DB_URI;
-const dbPort = process.env.DB_PORT;
-const url = `${dbURI}:${dbPort}/${collection}`;
+/**
+ * Configuración de la conexión a la base de datos.
+ * **Nota:** En el archivo .env, debes configurar las variables de entorno de
+ * la base de datos.
+ */
+const url = process.env.ATLAS_URL;
 
 try {
   mongoose.connect(url);
