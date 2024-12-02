@@ -1,41 +1,43 @@
 import { Fragment } from "react";
-import { Outlet, useNavigate } from "react-router-dom"; // Importa useNavigate
+import { Outlet } from "react-router-dom";
 import {
     NavigationContainer,
     NavigationItem,
     NavigationLogo,
     NavigationList,
+    NavigationLogoImage,
 } from "./navigation.styles.jsx";
 import { navOptions } from "../../constants/navigation.const.js";
-import Button from "../../components/UI/button/button.component.jsx";
+import { useDispatch } from "react-redux";
+import { logoutCenterStart } from "../../store/center/center.action.js";
 
 const Navigation = () => {
-    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
-    const handleCreateAccountClick = () => {
-        navigate('/login'); 
+    const handleLogout = () => {
+        dispatch(logoutCenterStart());
+        alert("Logged out");
     };
 
     return (
         <Fragment>
             <NavigationContainer>
                 <NavigationLogo>
-                    <h1>🧑🏻‍⚕️ </h1>
-                    <h1>MEDI</h1>
-                    
+                    <NavigationLogoImage src="https://pastoraldelasaludrd.com/images/Logos/PASTORAL1.png" />
                 </NavigationLogo>
                 <NavigationList>
                     {navOptions.map((option, index) => (
                         <NavigationItem key={index} to={option.route}>
-                            <li>{option.name}</li>
+                            {option.name}
                         </NavigationItem>
                     ))}
+                    <NavigationItem
+                        onClick={handleLogout}
+                        to="/login"
+                    >
+                        Logout
+                    </NavigationItem>
                 </NavigationList>
-                <Button
-                    title="Crear cuenta"
-                    buttonType="main"
-                    onClick={handleCreateAccountClick} 
-                />
             </NavigationContainer>
             <Outlet />
         </Fragment>
