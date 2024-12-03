@@ -1,5 +1,20 @@
 const Centro = require('../models/centro.model');
 
+// Función para verificar si el centro existe
+const checkCenterExists = async (req, res) => {
+    const { usuario } = req.params;
+    try {
+        const center = await Centro.findOne({ usuario }); // Suponiendo que "usuario" es único
+        if (center) {
+            return res.status(200).json({ exists: true });
+        } else {
+            return res.status(200).json({ exists: false });
+        }
+    } catch (error) {
+        console.error("Error al verificar si el centro existe:", error);
+        return res.status(500).json({ message: "Error al verificar el centro", error: error.message });
+    }
+};
 
 const GetAllCenters = async (req, res) => {
     try {
@@ -59,6 +74,7 @@ const CreateCenters = async (req, res) => {
 };
 
 const LoginCenter = async (req, res) => {
+    console.log(req.body);
     try {
         const center = await Centro.findByCredentials(
             req.body.usuario,
@@ -68,13 +84,21 @@ const LoginCenter = async (req, res) => {
         if (!center) {
             return res.status(401).send({ error: "Login failed! Check authentication credentials" });
         }
+        
+        
         const token = await center.generateAuthToken();
         
-        res.status(201).send({ center, token });
+        
+        console.log('Token generado:', token);
+
+        
+        res.status(200).send({ center, token: token.toString() }); 
     } catch (error) {
-        res.status(500).send({ error: error });
+        console.error("Error al hacer login:", error);
+        res.status(500).send({ error: "Error en el servidor", message: error.message });
     }
 };
+
 
 const LogoutCenter = async (req, res) => {
     try {
@@ -136,5 +160,6 @@ module.exports = {
     LogoutCenter,
     LogoutAllCenters,
     UpdateCenter,
-    DeleteAllCenters
+    DeleteAllCenters,
+    checkCenterExists 
 };

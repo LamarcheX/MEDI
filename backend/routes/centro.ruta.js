@@ -9,7 +9,8 @@ const {
     LogoutCenter,
     LogoutAllCenters,
     UpdateCenter,
-    DeleteAllCenters
+    DeleteAllCenters,
+    checkCenterExists // Ruta para verificar si el centro existe
 } = require("../controllers/centro.controlador");
 const authMiddleware = require("../middleware/authMiddleware");
 
@@ -34,5 +35,7 @@ router.post("/api/centros/many", CreateCenters);
 router.patch("/api/centros/:id", UpdateCenter);
 
 router.delete("/api/centros", DeleteAllCenters);
+
+router.get("/api/centros/exists/:usuario", checkCenterExists);
 
 module.exports = router;
