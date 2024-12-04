@@ -24,7 +24,7 @@ router.get("/api/citas/centro", citaController.citasCentro);
 
 router.get("/api/citas/especialista", citaController.citasEspecialista);
 router.get("/api/especialistas", citaController.especialistas);
-router.get("/api/centros", citaController.centros);
+
 
 /**
  * Ruta para crear una nueva cita.
