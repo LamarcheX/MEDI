@@ -386,7 +386,7 @@ const AddServiceRequestModal = ({ isOpen, onClose, onSubmit }) => {
 AddServiceRequestModal.propTypes = {
     isOpen: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
-    onSubmit: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func,
 };
 
 export default AddServiceRequestModal;

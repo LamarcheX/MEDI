@@ -17,7 +17,7 @@ const historyReducer = (state = INITIAL_STATE, action) => {
         case HISTORY_ACTION_TYPES.GET_HISTORY_START:
         case HISTORY_ACTION_TYPES.UPDATE_HISTORY_START:
         case HISTORY_ACTION_TYPES.DELETE_HISTORY_START:
-            return { ...state, errorMessage: null, isLoading: true };
+            return { ...state, errorMessage: null, isLoading: true, history: [] };
         case HISTORY_ACTION_TYPES.CREATE_HISTORY_SUCCESS:
             return {
                 ...state,

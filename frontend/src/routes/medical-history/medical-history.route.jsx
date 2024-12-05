@@ -1,10 +1,12 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import TableFilters from "../../components/table-filter/table-filter.component";
-import { MOCK_SERVICE_REQUESTS } from "../../constants/mock"
 import ServiceRequestsTable from "../service/another-service";
 import { MedicalHistoryWrapper, MedicalHistoryHeader } from "./medical-history.styles";
 import { Button } from "../../components/UI/button.styles";
 import AddServiceRequestModal from "../../components/modals/add-service-request/add-service-request.component";
+import { getHistoryStart } from "../../store/history/history.action";
+import { selectHistoryReducer } from "../../store/history/history.selector";
 
 const MedicalHistory = () => {
     const [filters, setFilters] = useState({
@@ -14,10 +16,17 @@ const MedicalHistory = () => {
     });
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [serviceRequested, setServiceRequested] = useState(MOCK_SERVICE_REQUESTS);
+    const dispatch = useDispatch();
+
+    const { history, isLoading, /* currentPage, totalPages, totalResults */ } = useSelector(selectHistoryReducer);
+
+    useEffect(() => {
+        dispatch(getHistoryStart());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const filteredRequests = useMemo(() => {
-        return serviceRequested.filter(request => {
+        return history.filter(request => {
             const searchMatch = filters.search.toLowerCase() === '' ||
                 request.nombrePaciente?.toLowerCase().includes(filters.search.toLowerCase()) ||
                 request.noCedula?.toLowerCase().includes(filters.search.toLowerCase()) ||
@@ -45,12 +54,7 @@ const MedicalHistory = () => {
 
             return searchMatch && statusMatch && dateMatch;
         });
-    }, [serviceRequested, filters]);
-
-    const handleAddServiceRequest = (newRequest) => {
-        console.log(newRequest);
-        setServiceRequested(prevRequests => [newRequest, ...prevRequests]);
-    };
+    }, [history, filters]);
 
     return (
         <MedicalHistoryWrapper>
@@ -68,12 +72,12 @@ const MedicalHistory = () => {
             </MedicalHistoryHeader>
             <ServiceRequestsTable
                 serviceRequests={filteredRequests}
-                loading={false}
+                loading={isLoading}
             />
             <AddServiceRequestModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
-                onSubmit={handleAddServiceRequest}
+                onSubmit={(data) => console.log(data)}
             />
         </MedicalHistoryWrapper>
     );
