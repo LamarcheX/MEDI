@@ -5,12 +5,18 @@ import { Label } from '../UI/label.styles';
 import { Input } from '../UI/input.styles';
 import { Button } from '../UI/button.styles';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginCenterStart } from '../../store/center/center.action';
+import { createCenterStart, loginCenterStart } from '../../store/center/center.action';
 import { useNavigate } from 'react-router-dom';
 import { selectCurrentCenter } from '../../store/center/center.selector';
+import Swal from 'sweetalert2';
 
 const LoginForm = () => {
-  const [formData, setFormData] = useState({
+  const [loginFormData, setLoginFormData] = useState({
+    usuario: '',
+    contraseña: '',
+  });
+
+  const [registerFormData, setRegisterFormData] = useState({
     usuario: '',
     contraseña: '',
   });
@@ -23,25 +29,43 @@ const LoginForm = () => {
     center && navigate('/');
   }, [center]);
 
+  const handleLoginChange = (e) => {
+    setLoginFormData({
+      ...loginFormData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
+  const handleRegisterChange = (e) => {
+    setRegisterFormData({
+      ...registerFormData,
       [e.target.name]: e.target.value,
     });
   };
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
-    const { usuario, contraseña } = formData;
+    const { usuario, contraseña } = loginFormData;
     dispatch(loginCenterStart({ usuario, contraseña }));
     navigate("/");
   };
 
   const handleRegisterSubmit = (e) => {
     e.preventDefault();
-    dispatch();
-  }
+    const { usuario, contraseña } = registerFormData;
+    console.log("Datos enviados:", { usuario, contraseña });
+
+    dispatch(createCenterStart({ usuario, contraseña }));
+
+    
+    Swal.fire({
+      icon: 'info',
+      title: 'Procesando Registro',
+      text: 'Estamos registrando el centro...',
+      showConfirmButton: false,
+      timer: 1500,
+    });
+  };
 
   return (
     <div style={{ maxWidth: '400px', margin: '0 auto', padding: '16px' }}>
@@ -65,8 +89,8 @@ const LoginForm = () => {
                     type="text"
                     name="usuario"
                     placeholder="Centro"
-                    value={formData.usuario}
-                    onChange={handleChange}
+                    value={loginFormData.usuario}
+                    onChange={handleLoginChange}
                     required
                   />
                 </TabsContentContainer>
@@ -77,8 +101,8 @@ const LoginForm = () => {
                     type="password"
                     name="contraseña"
                     placeholder="Contraseña"
-                    value={formData.contraseña}
-                    onChange={handleChange}
+                    value={loginFormData.contraseña}
+                    onChange={handleLoginChange}
                     required
                   />
                 </TabsContentContainer>
@@ -93,10 +117,10 @@ const LoginForm = () => {
                   <Label htmlFor="centro">Centro/Hospital</Label>
                   <Input
                     type="text"
-                    name="centro"
+                    name="usuario"
                     placeholder="Centro"
-                    value={formData.usuario}
-                    onChange={handleChange}
+                    value={registerFormData.usuario}
+                    onChange={handleRegisterChange}
                     required
                   />
                 </TabsContentContainer>
@@ -106,8 +130,8 @@ const LoginForm = () => {
                     type="password"
                     name="contraseña"
                     placeholder="Contraseña"
-                    value={formData.contraseña}
-                    onChange={handleChange}
+                    value={registerFormData.contraseña}
+                    onChange={handleRegisterChange}
                     required
                   />
                 </TabsContentContainer>
