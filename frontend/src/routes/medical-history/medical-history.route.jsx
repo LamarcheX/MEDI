@@ -5,8 +5,10 @@ import ServiceRequestsTable from "../service/another-service";
 import { MedicalHistoryWrapper, MedicalHistoryHeader } from "./medical-history.styles";
 import { Button } from "../../components/UI/button.styles";
 import AddServiceRequestModal from "../../components/modals/add-service-request/add-service-request.component";
-import { getHistoryStart } from "../../store/history/history.action";
+import { createHistoryStart, getHistoryByCenterStart } from "../../store/history/history.action";
 import { selectHistoryReducer } from "../../store/history/history.selector";
+import { selectCurrentCenter } from "../../store/center/center.selector";
+import Pagination from "../../components/pagination/pagination.component";
 
 const MedicalHistory = () => {
     const [filters, setFilters] = useState({
@@ -18,10 +20,17 @@ const MedicalHistory = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const dispatch = useDispatch();
 
-    const { history, isLoading, /* currentPage, totalPages, totalResults */ } = useSelector(selectHistoryReducer);
+    const {
+        history = [],
+        isLoading,
+        currentPage,
+        totalPages,
+        totalResults
+    } = useSelector(selectHistoryReducer);
+    const center = useSelector(selectCurrentCenter);
 
     useEffect(() => {
-        dispatch(getHistoryStart());
+        dispatch(getHistoryByCenterStart({ idCentro: center._id }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -56,6 +65,19 @@ const MedicalHistory = () => {
         });
     }, [history, filters]);
 
+    const handlePageChange = (page) => {
+        const queries = { page }
+        dispatch(getHistoryByCenterStart({ idCentro: center._id, queries }));
+    };
+
+    const handleSubmission = (data) => {
+        const historyData = {
+            ...data,
+            idCentro: center._id
+        };
+        dispatch(createHistoryStart({history: historyData}));
+    };
+
     return (
         <MedicalHistoryWrapper>
             <h1>Historial Medico</h1>
@@ -74,10 +96,16 @@ const MedicalHistory = () => {
                 serviceRequests={filteredRequests}
                 loading={isLoading}
             />
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                totalResults={totalResults}
+                onPageChange={handlePageChange}
+            />
             <AddServiceRequestModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
-                onSubmit={(data) => console.log(data)}
+                onSubmit={handleSubmission}
             />
         </MedicalHistoryWrapper>
     );

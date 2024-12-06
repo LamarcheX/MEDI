@@ -7,14 +7,18 @@ const INITIAL_STATE = {
     currentPage: 1,
     totalPages: 1,
     totalResults: 0,
+    hasNextPage: false,
+    hasPrevPage: false,
 };
 
 const historyReducer = (state = INITIAL_STATE, action) => {
     const { type, payload } = action;
+    const { data, pagination } = payload || {};
 
     switch (type) {
         case HISTORY_ACTION_TYPES.CREATE_HISTORY_START:
         case HISTORY_ACTION_TYPES.GET_HISTORY_START:
+        case HISTORY_ACTION_TYPES.GET_HISTORY_BY_CENTER_START:
         case HISTORY_ACTION_TYPES.UPDATE_HISTORY_START:
         case HISTORY_ACTION_TYPES.DELETE_HISTORY_START:
             return { ...state, errorMessage: null, isLoading: true, history: [] };
@@ -30,10 +34,24 @@ const historyReducer = (state = INITIAL_STATE, action) => {
                 ...state,
                 errorMessage: null,
                 isLoading: false,
-                history: payload.data,
-                currentPage: payload.currentPage,
-                totalPages: payload.totalPages,
-                totalResults: payload.totalResults,
+                history: data,
+                currentPage: pagination.currentPage,
+                totalPages: pagination.totalPages,
+                totalResults: pagination.totalDocuments,
+                hasNextPage: pagination.hasNextPage,
+                hasPrevPage: pagination.hasPrevPage,
+            };
+        case HISTORY_ACTION_TYPES.GET_HISTORY_BY_CENTER_SUCCESS:
+            return {
+                ...state,
+                errorMessage: null,
+                isLoading: false,
+                history: data,
+                currentPage: pagination.currentPage,
+                totalPages: pagination.totalPages,
+                totalResults: pagination.totalDocuments,
+                hasNextPage: pagination.hasNextPage,
+                hasPrevPage: pagination.hasPrevPage,
             };
         case HISTORY_ACTION_TYPES.UPDATE_HISTORY_SUCCESS:
             return {
@@ -53,6 +71,7 @@ const historyReducer = (state = INITIAL_STATE, action) => {
             };
         case HISTORY_ACTION_TYPES.CREATE_HISTORY_FAILED:
         case HISTORY_ACTION_TYPES.GET_HISTORY_FAILED:
+        case HISTORY_ACTION_TYPES.GET_HISTORY_BY_CENTER_FAILED:
         case HISTORY_ACTION_TYPES.UPDATE_HISTORY_FAILED:
         case HISTORY_ACTION_TYPES.DELETE_HISTORY_FAILED:
             return { ...state, errorMessage: payload, isLoading: false };

@@ -18,9 +18,10 @@ export const getHistorialById = async (id) => {
     }
 };
 
-export const getHistorialByCenter = async (centerId) => {
+export const getHistorialByCenter = async (payload) => {
+    const { idCentro, queries = {} } = payload;
     try {
-        const response = await api.get(`/api/historial-clinico/centro/${centerId}`);
+        const response = await api.get(`/api/historial-clinico/byCenter/${idCentro}`, { params: queries });
         return response.data;
     } catch (error) {
         throw Error("Error al obtener el historial clínico", error);
@@ -29,7 +30,7 @@ export const getHistorialByCenter = async (centerId) => {
 
 export const createHistorial = async (historial) => {
     try {
-        const response = await api.post("/historial-clinico", historial);
+        const response = await api.post("/api/historial-clinico", historial);
         return response.data;
     } catch (error) {
         throw Error("Error al crear el historial clínico", error);
