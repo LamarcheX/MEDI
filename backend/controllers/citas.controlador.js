@@ -295,7 +295,8 @@ controller.unicaCita = async (req, res) => {
  */
 
 controller.actualizarCita = async (req, res) => {
-  const { _id, ...datos } = req.body;
+  const { _id, ...datos } = req.body;  // Extraemos el _id y los datos
+
   console.log("ID de la cita a actualizar:", _id);
   console.log("Datos de actualización:", datos);
 
@@ -304,11 +305,13 @@ controller.actualizarCita = async (req, res) => {
   }
 
   try {
+    // Eliminamos el campo `updatedAt` si está presente en los datos antes de la actualización
+    delete datos.updatedAt;
+
     const resultado = await CitaModel.updateOne(
       { _id: _id },
       {
-        $set: datos,
-        $currentDate: { updatedAt: true },
+        $set: datos,  // Actualizamos los datos, sin intentar actualizar `updatedAt`
       },
       { runValidators: true }
     );
@@ -325,16 +328,17 @@ controller.actualizarCita = async (req, res) => {
         .json({ message: "No se realizaron cambios en la cita" });
     }
 
-    // Obtener la cita actualizada para enviarla en la respuesta
-    const citaActualizada = await CitaModel.findById(_id);
-    res.json(citaActualizada);
+    // Si la cita fue actualizada correctamente, devolvemos los datos actualizados
+    const updatedAppointment = await CitaModel.findById(_id);
+    return res.status(200).json(updatedAppointment);
+
   } catch (error) {
     console.error("Error al actualizar la cita:", error);
-    res
-      .status(500)
-      .json({ error: "Error al actualizar la cita", details: error.message });
+    return res.status(500).json({ error: "Error al actualizar la cita" });
   }
 };
+
+
 
 /**
  * Controlador para eliminar una cita existente.

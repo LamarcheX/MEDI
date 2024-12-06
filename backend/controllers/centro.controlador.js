@@ -1,20 +1,7 @@
 const Centro = require('../models/centro.model');
 
-// Función para verificar si el centro existe
-const checkCenterExists = async (req, res) => {
-    const { usuario } = req.params;
-    try {
-        const center = await Centro.findOne({ usuario }); // Suponiendo que "usuario" es único
-        if (center) {
-            return res.status(200).json({ exists: true });
-        } else {
-            return res.status(200).json({ exists: false });
-        }
-    } catch (error) {
-        console.error("Error al verificar si el centro existe:", error);
-        return res.status(500).json({ message: "Error al verificar el centro", error: error.message });
-    }
-};
+
+
 
 const GetAllCenters = async (req, res) => {
     try {
@@ -53,14 +40,25 @@ const ReadCurrentCenter = async (req, res) => {
 };
 
 const CreateACenter = async (req, res) => {
-    const center = new Centro(req.body);
-    
     try {
+        // Check if a document with the same usuario and nombre already exists
+        const existingCenter = await Centro.findOne({ 
+            usuario: req.body.usuario, 
+            nombre: req.body.nombre 
+        });
+
+        if (existingCenter) {
+            return res.status(400).send({error:"Existing", message: "A center with the same usuario and nombre already exists." });
+        }
+
+        // If not, create a new center
+        const center = new Centro(req.body);
+
         await center.save();
         res.status(201).send(center);
     } catch (error) {
-        res.status(500).send({ error: error });
-    }
+        res.status(500).send({ error: error.message });
+    }
 };
 
 // create an array of centers
@@ -161,5 +159,4 @@ module.exports = {
     LogoutAllCenters,
     UpdateCenter,
     DeleteAllCenters,
-    checkCenterExists 
 };
