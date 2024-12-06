@@ -22,6 +22,16 @@ export const getHistorySuccess = (history) =>
 export const getHistoryFailed = (errorMessage) =>
     createAction(HISTORY_ACTION_TYPES.GET_HISTORY_FAILED, errorMessage);
 
+// Get history by center id action creators
+export const getHistoryByCenterStart = (payload) =>
+    createAction(HISTORY_ACTION_TYPES.GET_HISTORY_BY_CENTER_START, payload);
+
+export const getHistoryByCenterSuccess = (history) =>
+    createAction(HISTORY_ACTION_TYPES.GET_HISTORY_BY_CENTER_SUCCESS, history);
+
+export const getHistoryByCenterFailed = (errorMessage) =>
+    createAction(HISTORY_ACTION_TYPES.GET_HISTORY_BY_CENTER_FAILED, errorMessage);
+
 // Update history action creators
 export const updateHistoryStart = (history) =>
     createAction(HISTORY_ACTION_TYPES.UPDATE_HISTORY_START, history);

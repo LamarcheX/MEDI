@@ -22,35 +22,36 @@ import {
 } from '../../utils/db/history.js';
 
 export function* createHistory({ payload: history }) {
+    console.log(history.history);
     try {
-        const newHistory = yield call(createHistorial, history);
+        const newHistory = yield call(createHistorial, history.history);
         yield put(createHistorySuccess(newHistory));
     } catch (error) {
         yield put(createHistoryFailed(error.message));
     }
 }
 
-export function* getHistory() {
+export function* getHistory({ payload: _id }) {
     try {
-        const history = yield call(getHistorial);
+        const history = yield call(getHistorial, _id);
         yield put(getHistorySuccess(history));
     } catch (error) {
         yield put(getHistoryFailed(error.message));
     }
 }
 
-export function* getHistoryById({ payload: id }) {
+export function* getHistoryById({ payload: _id }) {
     try {
-        const history = yield call(getHistorialById, id);
+        const history = yield call(getHistorialById, _id);
         yield put(getHistorySuccess(history));
     } catch (error) {
         yield put(getHistoryFailed(error.message));
     }
 }
 
-export function* getHistoryByCenter({ payload: centerId }) {
+export function* getHistoryByCenter(payload) {
     try {
-        const history = yield call(getHistorialByCenter, centerId);
+        const history = yield call(getHistorialByCenter, payload.payload);
         yield put(getHistorySuccess(history));
     } catch (error) {
         yield put(getHistoryFailed(error.message));
@@ -83,6 +84,10 @@ export function* onGetHistoryStart() {
     yield takeLatest(HISTORY_ACTION_TYPES.GET_HISTORY_START, getHistory);
 }
 
+export function* onGetHistoryByCenterStart() {
+    yield takeLatest(HISTORY_ACTION_TYPES.GET_HISTORY_BY_CENTER_START, getHistoryByCenter);
+}
+
 export function* onGetHistoryByIdStart() {
     yield takeLatest(HISTORY_ACTION_TYPES.GET_HISTORY_BY_ID_START, getHistoryById);
 }
@@ -99,6 +104,7 @@ export function* historySagas() {
     yield all([
         call(onCreateHistoryStart),
         call(onGetHistoryStart),
+        call(onGetHistoryByCenterStart),
         call(onGetHistoryByIdStart),
         call(onUpdateHistoryStart),
         call(onDeleteHistoryStart),

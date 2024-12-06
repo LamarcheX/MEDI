@@ -28,9 +28,9 @@ const ServiceRequestsTable = ({ serviceRequests = [], loading = false }) => {
   const [sortConfig, setSortConfig] = useState({ key: 'fecha', direction: 'desc' });
   const [expandedRows, setExpandedRows] = useState(new Set());
 
-  loading ?? <TripleSpinner />;
-
-  if (!serviceRequests || serviceRequests.length === 0) {
+  if (loading) {
+    return <TripleSpinner />;
+  } else if (!serviceRequests || serviceRequests.length === 0) {
     return (
       <Card>
         <CardContent>

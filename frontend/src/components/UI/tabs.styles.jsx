@@ -33,6 +33,10 @@ export const TabsContent = styled(TabsPrimitive.Content)`
     margin-top: 16px;
     display: grid;
     grid-template-columns: repeat(${props => props.columns ? props.columns : 2}, 1fr);
+
+    &[data-state='inactive'] {
+        display: none;
+    }
 `;
 
 export const TabsColumnItem = styled.div`

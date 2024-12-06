@@ -20,7 +20,7 @@ const AddServiceRequestModal = ({ isOpen, onClose, onSubmit }) => {
         medicamento, nombreDeDispensario, provincia,
         observacion, nssOContrato, noAutorizacion,
         valorReclamado, totalDeReclamaciones, revisado,
-        validFact, objetado, idCentro
+        validFact, objetado
     } = formData;
 
     const handleChange = (e) => {
@@ -168,6 +168,7 @@ const AddServiceRequestModal = ({ isOpen, onClose, onSubmit }) => {
                                         name={"fecha"}
                                         placeholder='Fecha'
                                         value={fecha}
+                                        type="date"
                                         onChange={handleChange}
                                     />
                                 </TabsContentContainer>
@@ -326,16 +327,6 @@ const AddServiceRequestModal = ({ isOpen, onClose, onSubmit }) => {
                                         name={"totalDeReclamaciones"}
                                         placeholder='Total de Reclamaciones'
                                         value={totalDeReclamaciones}
-                                        onChange={handleChange}
-                                    />
-                                </TabsContentContainer>
-                                <TabsContentContainer>
-                                    <Label htmlFor={"idCentro"}>ID Centro</Label>
-                                    <Input
-                                        id={"idCentro"}
-                                        name={"idCentro"}
-                                        placeholder='ID Centro'
-                                        value={idCentro}
                                         onChange={handleChange}
                                     />
                                 </TabsContentContainer>
