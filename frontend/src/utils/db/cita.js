@@ -21,7 +21,7 @@ export const getCitaById = async (citaId) => {
 
 export const createCita = async (cita) => {
     try {
-        const response = await api.post('/api/citas', cita);
+        const response = await api.post('/api/cita/crear', cita);
         return response.data;
     } catch (error) {
         throw new Error('Error while creating the cita', error);

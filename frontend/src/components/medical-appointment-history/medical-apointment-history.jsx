@@ -1,46 +1,43 @@
 import { useState, useEffect } from "react";
 import { Card, CardHeader, CardContent, CardTitle } from "../UI/card.styles";
+import {
+  Capsule,
+  CapsuleHeader,
+  CapsuleText,
+  Table,
+  TableRow,
+  TableLabel,
+  TableValue,
+  TableContainer,
+  TableColumn,
+  TableTitle,
+  InputField,
+  ButtonContainer,
+  Button,
+} from "./medical-apointment-history-styles";
 import { Input } from "../UI/input.styles";
-import Modal from "../UI/modal/modal.component";
-import styled from "styled-components";
 import moment from "moment";
 
-const Capsule = styled.div`
-  background-color: #f4f4f4;
-  border-radius: 15px;
-  padding: 20px;
-  margin-bottom: 15px;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-
-  &:hover {
-    background-color: #e0e0e0;
-    transform: scale(1.02);
-  }
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-`;
-
-const CapsuleHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  font-weight: bold;
-`;
-
-const CapsuleText = styled.p`
-  font-size: 14px;
-  margin: 0;
-`;
+const EditableRow = ({ label, value, isEditing, onChange, fieldName }) => (
+  <TableRow>
+    <TableLabel>{label}</TableLabel>
+    <TableValue>
+      {isEditing ? (
+        <InputField value={value} onChange={(e) => onChange(e, fieldName)} />
+      ) : (
+        value
+      )}
+    </TableValue>
+  </TableRow>
+);
 
 const PreviousAppointments = () => {
   const [appointments, setAppointments] = useState([]);
   const [filteredAppointments, setFilteredAppointments] = useState([]);
   const [search, setSearch] = useState("");
-  const [modalData, setModalData] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
+  const [openAppointmentId, setOpenAppointmentId] = useState(null); // Estado que indica la cita abierta
+  const [editingAppointmentId, setEditingAppointmentId] = useState(null);
+  const [editedAppointment, setEditedAppointment] = useState({});
 
   useEffect(() => {
     fetch("http://localhost:5000/api/citas")
@@ -56,70 +53,84 @@ const PreviousAppointments = () => {
     const query = e.target.value.toLowerCase();
     setSearch(query);
 
-    if (query === "") {
-      setFilteredAppointments(appointments);
-    } else {
-      setFilteredAppointments(
-        appointments.filter((app) => {
-          return (
-            (app.centro_nombre &&
-              app.centro_nombre.toLowerCase().includes(query)) ||
-            (app.especialista &&
-              app.especialista.toLowerCase().includes(query)) ||
-            (app.paciente_nombre &&
-              app.paciente_nombre.toLowerCase().includes(query))
-          );
-        })
-      );
-    }
+    setFilteredAppointments(
+      query
+        ? appointments.filter((app) => {
+            return (
+              (app.centro_nombre &&
+                app.centro_nombre.toLowerCase().includes(query)) ||
+              (app.especialista &&
+                app.especialista.toLowerCase().includes(query)) ||
+              (app.paciente_nombre &&
+                app.paciente_nombre.toLowerCase().includes(query))
+            );
+          })
+        : appointments
+    );
   };
 
-  const openModal = (appointment) => {
-    setModalData(appointment);
-    setIsEditing(false);
+  const toggleAppointmentDetails = (appointmentId) => {
+    setOpenAppointmentId((prevId) =>
+      prevId === appointmentId ? null : appointmentId
+    );
   };
 
-  const closeModal = () => {
-    setModalData(null);
-    setIsEditing(false);
+  const handleEdit = (appointment) => {
+    setEditingAppointmentId(appointment._id);
+    setEditedAppointment({ ...appointment });
   };
 
-  const handleEdit = () => {
-    setIsEditing(true);
+  const handleInputChange = (e, field) => {
+    setEditedAppointment((prevState) => ({
+      ...prevState,
+      [field]: e.target.value,
+    }));
   };
 
-  const updateAppointment = (editedData) => {
-    const horaConvertida = moment(editedData.hora, "hh:mm A").format("HH:mm");
+  const handleSaveEdit = () => {
+    const updatedHora = moment(editedAppointment.hora, "hh:mm A").format(
+      "HH:mm"
+    );
+    editedAppointment.hora = updatedHora;
 
-    editedData.hora = horaConvertida;
-
-    console.log("Datos convertidos antes de enviar:", editedData);
-
-    fetch(`http://localhost:5000/api/cita/actualizar/${editedData._id}`, {
+    fetch("http://localhost:5000/api/cita/actualizar", {
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(editedData),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(editedAppointment),
     })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Error al actualizar la cita");
-        }
-        return res.json();
-      })
+      .then((res) => res.json())
       .then((data) => {
         setAppointments((prevAppointments) =>
           prevAppointments.map((appointment) =>
             appointment._id === data._id ? data : appointment
           )
         );
-        setIsEditing(false);
-        console.log("Cita actualizada con éxito", data);
+        setFilteredAppointments((prevAppointments) =>
+          prevAppointments.map((appointment) =>
+            appointment._id === data._id ? data : appointment
+          )
+        );
+        setEditingAppointmentId(null);
+        setEditedAppointment({});
       })
-      .catch((error) => {
-        console.error("Error al actualizar la cita:", error);
-      });
+      .catch((error) => console.error("Error al actualizar la cita:", error));
+  };
+
+  const handleDelete = (appointmentId) => {
+    fetch("http://localhost:5000/api/cita/eliminar", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ _id: appointmentId }),
+    })
+      .then(() => {
+        setAppointments(
+          appointments.filter((app) => app._id !== appointmentId)
+        );
+        setFilteredAppointments(
+          filteredAppointments.filter((app) => app._id !== appointmentId)
+        );
+      })
+      .catch((error) => console.error("Error al eliminar la cita:", error));
   };
 
   return (
@@ -135,28 +146,116 @@ const PreviousAppointments = () => {
         />
         <div>
           {filteredAppointments.map((appointment) => (
-            <Capsule
-              key={appointment._id}
-              onClick={() => openModal(appointment)}
-            >
-              <CapsuleHeader>
-                <CapsuleText>{appointment.centro_nombre}</CapsuleText>
-                <CapsuleText>{appointment.especialista}</CapsuleText>
-                <CapsuleText>{appointment.paciente_nombre}</CapsuleText>
-              </CapsuleHeader>
-            </Capsule>
+            <div key={appointment._id}>
+              <Capsule
+                onClick={() => toggleAppointmentDetails(appointment._id)}
+              >
+                <CapsuleHeader>
+                  <CapsuleText>{appointment.centro_nombre}</CapsuleText>
+                  <CapsuleText>{appointment.especialista}</CapsuleText>
+                  <CapsuleText>{appointment.paciente_nombre}</CapsuleText>
+                </CapsuleHeader>
+              </Capsule>
+
+              {openAppointmentId === appointment._id && (
+                <TableContainer>
+                  <TableColumn>
+                    <TableTitle>Info Cita</TableTitle>
+                    {[
+                      { label: "Especialista", field: "especialista" },
+                      { label: "Fecha", field: "fecha" },
+                      { label: "Hora", field: "hora" },
+                      { label: "Tipo de Servicio", field: "tipo_servicio" },
+                      { label: "Estado", field: "estado" },
+                    ].map(({ label, field }) => (
+                      <EditableRow
+                        key={field}
+                        label={label}
+                        value={
+                          field === "fecha"
+                            ? moment(appointment[field]).format("DD/MM/YYYY")
+                            : appointment[field]
+                        } // Formateo solo la fecha
+                        isEditing={editingAppointmentId === appointment._id}
+                        onChange={handleInputChange}
+                        fieldName={field}
+                      />
+                    ))}
+                  </TableColumn>
+
+                  <TableColumn>
+                    <TableTitle>Info Paciente</TableTitle>
+                    {[
+                      { label: "Paciente Nombre", field: "paciente_nombre" },
+                      { label: "Edad", field: "paciente_edad" },
+                      { label: "Nacionalidad", field: "paciente_nacionalidad" },
+                      { label: "Cédula", field: "paciente_cedula" },
+                      { label: "Género", field: "paciente_genero" },
+                    ].map(({ label, field }) => (
+                      <EditableRow
+                        key={field}
+                        label={label}
+                        value={appointment[field]}
+                        isEditing={editingAppointmentId === appointment._id}
+                        onChange={handleInputChange}
+                        fieldName={field}
+                      />
+                    ))}
+                  </TableColumn>
+
+                  <TableColumn>
+                    <TableTitle>Info Adicional</TableTitle>
+                    {[
+                      { label: "Dirección", field: "paciente_direccion" },
+                      { label: "Tipo de Paciente", field: "tipo_paciente" },
+                      {
+                        label: "Solicitante Nombre",
+                        field: "solicitante_nombre",
+                      },
+                      {
+                        label: "Solicitante Apellido",
+                        field: "solicitante_apellido",
+                      },
+                      { label: "Afiliación ARS", field: "afiliacion_ars" },
+                      { label: "Centro Nombre", field: "centro_nombre" },
+                    ].map(({ label, field }) => (
+                      <EditableRow
+                        key={field}
+                        label={label}
+                        value={appointment[field]}
+                        isEditing={editingAppointmentId === appointment._id}
+                        onChange={handleInputChange}
+                        fieldName={field}
+                      />
+                    ))}
+                  </TableColumn>
+
+                  {/* Botones solo en la tabla de detalles */}
+                  <ButtonContainer>
+                    <Button onClick={() => handleDelete(appointment._id)}>
+                      Eliminar cita
+                    </Button>
+                    {editingAppointmentId !== appointment._id && (
+                      <Button onClick={() => handleEdit(appointment)}>
+                        Editar cita
+                      </Button>
+                    )}
+                  </ButtonContainer>
+                </TableContainer>
+              )}
+
+              {editingAppointmentId === appointment._id && (
+                <ButtonContainer>
+                  <Button onClick={handleSaveEdit}>Guardar cambios</Button>
+                  <Button onClick={() => setEditingAppointmentId(null)}>
+                    Cancelar
+                  </Button>
+                </ButtonContainer>
+              )}
+            </div>
           ))}
         </div>
       </CardContent>
-      {modalData && (
-        <Modal
-          onClose={closeModal}
-          modalData={modalData}
-          isEditing={isEditing}
-          updateAppointment={updateAppointment}
-          handleEdit={handleEdit}
-        />
-      )}
     </Card>
   );
 };

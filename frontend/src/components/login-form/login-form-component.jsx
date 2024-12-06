@@ -1,9 +1,20 @@
-import { useEffect, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '../UI/card.styles';
-import { Tabs, TabsContent, TabsList, TabsTrigger, TabsContentContainer } from '../UI/tabs.styles';
-import { Label } from '../UI/label.styles';
-import { Input } from '../UI/input.styles';
-import { Button } from '../UI/button.styles';
+import { useState, useEffect } from 'react';
+import {
+  LoginContainer,
+  FormPanel,
+  Card,
+  CardHeader,
+  CardContent,
+  CardFooter,
+  Label,
+  Input,
+  Button,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
+  TabsContentContainer,
+  LoginGlobalStyle
+} from './login-form-styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { createCenterStart, loginCenterStart } from '../../store/center/center.action';
 import { useNavigate } from 'react-router-dom';
@@ -11,6 +22,7 @@ import { selectCurrentCenter } from '../../store/center/center.selector';
 import Swal from 'sweetalert2';
 
 const LoginForm = () => {
+  const [currentTab, setCurrentTab] = useState('login');
   const [loginFormData, setLoginFormData] = useState({
     usuario: '',
     contraseña: '',
@@ -47,17 +59,13 @@ const LoginForm = () => {
     e.preventDefault();
     const { usuario, contraseña } = loginFormData;
     dispatch(loginCenterStart({ usuario, contraseña }));
-    navigate("/");
+    navigate('/');
   };
 
   const handleRegisterSubmit = (e) => {
     e.preventDefault();
     const { usuario, contraseña } = registerFormData;
-    console.log("Datos enviados:", { usuario, contraseña });
-
     dispatch(createCenterStart({ usuario, contraseña }));
-
-    
     Swal.fire({
       icon: 'info',
       title: 'Procesando Registro',
@@ -68,27 +76,42 @@ const LoginForm = () => {
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: '0 auto', padding: '16px' }}>
-      <Card>
-        <CardHeader>
-          <CardTitle>Bienvenido</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Tabs defaultValue="login">
-            <TabsList columns={2}>
-              <TabsTrigger value="login">Iniciar Sesión</TabsTrigger>
-              <TabsTrigger value="register">Registro</TabsTrigger>
-            </TabsList>
+    <>
+    <LoginGlobalStyle/>
+    <LoginContainer currentTab={currentTab}>
+     
 
-            {/* Pestaña de Iniciar Sesión */}
-            <TabsContent value="login" columns={1}>
+      <div className="form-container">
+        <FormPanel>
+          <Card>
+            <CardHeader>
+              <h2>{currentTab === 'login' ? 'Bienvenido de vuelta!' : 'Crear una cuenta'}</h2>
+            </CardHeader>
+            <CardContent>
+              <TabsList>
+                <TabsTrigger
+                  active={currentTab === 'login'}
+                  onClick={() => setCurrentTab('login')}
+                >
+                  Iniciar Sesion
+                </TabsTrigger>
+                <TabsTrigger
+                  active={currentTab === 'register'}
+                  onClick={() => setCurrentTab('register')}
+                >
+                  Registrar Usuario
+                </TabsTrigger>
+              </TabsList>
+
+              {/* Login Tab */}
+              <TabsContent active={currentTab === 'login'}>
                 <TabsContentContainer>
-                  <Label htmlFor="usuario">Centro</Label>
+                  <Label htmlFor="usuario">Usuario</Label>
                   <Input
-                    id='usuario'
+                    id="usuario"
                     type="text"
                     name="usuario"
-                    placeholder="Centro"
+                    placeholder="Username"
                     value={loginFormData.usuario}
                     onChange={handleLoginChange}
                     required
@@ -97,52 +120,56 @@ const LoginForm = () => {
                 <TabsContentContainer>
                   <Label htmlFor="contraseña">Contraseña</Label>
                   <Input
-                    id='contraseña'
+                    id="contraseña"
                     type="password"
                     name="contraseña"
-                    placeholder="Contraseña"
+                    placeholder="Password"
                     value={loginFormData.contraseña}
                     onChange={handleLoginChange}
                     required
                   />
                 </TabsContentContainer>
                 <CardFooter>
-                  <Button onClick={handleLoginSubmit}>Iniciar Sesión</Button>
+                  <Button onClick={handleLoginSubmit}>Acceder</Button>
                 </CardFooter>
-            </TabsContent>
+              </TabsContent>
 
-            {/* Pestaña de Registro */}
-            <TabsContent value="register" columns={1}>
+              {/* Register Tab */}
+              <TabsContent active={currentTab === 'register'}>
                 <TabsContentContainer>
-                  <Label htmlFor="centro">Centro/Hospital</Label>
+                  <Label htmlFor="centro">Hospital/Center</Label>
                   <Input
+                    id="centro"
                     type="text"
                     name="usuario"
-                    placeholder="Centro"
+                    placeholder="Center"
                     value={registerFormData.usuario}
                     onChange={handleRegisterChange}
                     required
                   />
                 </TabsContentContainer>
                 <TabsContentContainer>
-                  <Label htmlFor="contraseña">Contraseña</Label>
+                  <Label htmlFor="contraseña">Password</Label>
                   <Input
+                    id="contraseña"
                     type="password"
                     name="contraseña"
-                    placeholder="Contraseña"
+                    placeholder="Password"
                     value={registerFormData.contraseña}
                     onChange={handleRegisterChange}
                     required
                   />
                 </TabsContentContainer>
                 <CardFooter>
-                  <Button onClick={handleRegisterSubmit}>Crear Cuenta</Button>
+                  <Button onClick={handleRegisterSubmit}>Crear cuenta</Button>
                 </CardFooter>
-            </TabsContent>
-          </Tabs>
-        </CardContent>
-      </Card>
-    </div>
+              </TabsContent>
+            </CardContent>
+          </Card>
+        </FormPanel>
+      </div>
+    </LoginContainer>
+    </>
   );
 };
 

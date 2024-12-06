@@ -18,11 +18,13 @@ function App() {
     if (center) {
       dispatch(checkCenterSessionStart());
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <Routes>
+    
+      <Route path="/login" element={<Login />} />
       <Route path="/" element={<Navigation />}>
         <Route
           index
@@ -40,7 +42,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/login" element={<Login />} />
       </Route>
     </Routes>
   );
