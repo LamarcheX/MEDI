@@ -57,8 +57,8 @@ const CreateACenter = async (req, res) => {
         await center.save();
         res.status(201).send(center);
     } catch (error) {
-        res.status(500).send({ error: error.message });
-    }
+        res.status(500).send({ error: error.message });
+    }
 };
 
 // create an array of centers
@@ -72,7 +72,6 @@ const CreateCenters = async (req, res) => {
 };
 
 const LoginCenter = async (req, res) => {
-    console.log(req.body);
     try {
         const center = await Centro.findByCredentials(
             req.body.usuario,
@@ -83,13 +82,8 @@ const LoginCenter = async (req, res) => {
             return res.status(401).send({ error: "Login failed! Check authentication credentials" });
         }
         
-        
         const token = await center.generateAuthToken();
-        
-        
-        console.log('Token generado:', token);
 
-        
         res.status(200).send({ center, token: token.toString() }); 
     } catch (error) {
         console.error("Error al hacer login:", error);

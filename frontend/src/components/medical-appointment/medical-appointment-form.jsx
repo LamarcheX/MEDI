@@ -17,6 +17,7 @@ const MedicalAppointmentForm = () => {
   const [samePatientVisit, setSamePatientVisit] = useState(true);
   const center = useSelector(selectCurrentCenter);
 
+  // Nombre del centro que se rellena automáticamente con el nombre del centro logueado
   const centro_nombre = formData.centro_nombre || center?.nombre || '';
 
   const {
@@ -43,7 +44,7 @@ const MedicalAppointmentForm = () => {
   } = formData;
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value });
+    setFormData({ ...formData, [e.target.name]: e.target.value }); // Cambié e.target.id por e.target.name
   };
 
   const handleCheckboxChange = () => {
@@ -54,11 +55,30 @@ const MedicalAppointmentForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+  
+   
+    const updatedFormData = {
+      ...formData,
+      centro_nombre: centro_nombre || center?.nombre || '',
+    };
+  
+    // Si el solicitante es el mismo que el paciente, copio los datos del paciente
     if (samePatientVisit) {
       const [solicitante_nombre, solicitante_apellido] = paciente_nombre.split(' ');
-      setFormData({ ...formData, solicitante_nombre, solicitante_apellido });
+      updatedFormData.solicitante_nombre = solicitante_nombre;
+      updatedFormData.solicitante_apellido = solicitante_apellido;
     }
-    console.log(formData);
+  
+
+    createCita(updatedFormData)
+      .then(() => {
+
+        setFormData(appointmentConsts.defualtFields);
+        setSamePatientVisit(true);  
+      })
+      .catch((error) => {
+        console.error('Error al crear la cita:', error);
+      });
   };
 
   return (
@@ -76,6 +96,7 @@ const MedicalAppointmentForm = () => {
               <TabsTrigger value="billing">Facturación</TabsTrigger>
             </TabsList>
 
+            {/* Pestaña Cita */}
             <TabsContent value="appointment" columns={1}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 <TabsContentContainer>
@@ -84,8 +105,8 @@ const MedicalAppointmentForm = () => {
                     placeholder="Nombre del centro"
                     onChange={handleChange}
                     value={centro_nombre}
-                    name='centro_nombre'
-                    disabled
+                    name="centro_nombre"
+                    disabled 
                   />
                 </TabsContentContainer>
                 <TabsContentContainer>
@@ -94,7 +115,7 @@ const MedicalAppointmentForm = () => {
                     placeholder="Nombre del especialista"
                     onChange={handleChange}
                     value={especialista}
-                    name='especialista'
+                    name="especialista"
                   />
                 </TabsContentContainer>
                 <CardDateAndTime>
@@ -120,12 +141,13 @@ const MedicalAppointmentForm = () => {
                     placeholder="Tipo de servicio"
                     onChange={handleChange}
                     value={tipo_servicio}
-                    name='tipo_servicio'
+                    name="tipo_servicio"
                   />
                 </TabsContentContainer>
               </div>
             </TabsContent>
 
+            {/* Pestaña Paciente */}
             <TabsContent value="patient" columns={1}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 <TabsContentContainer>
@@ -134,7 +156,7 @@ const MedicalAppointmentForm = () => {
                     placeholder="Nombre completo"
                     onChange={handleChange}
                     value={paciente_nombre}
-                    name='paciente_nombre'
+                    name="paciente_nombre"
                   />
                 </TabsContentContainer>
                 <TabsContentContainer>
@@ -144,7 +166,7 @@ const MedicalAppointmentForm = () => {
                     placeholder="Edad"
                     onChange={handleChange}
                     value={paciente_edad}
-                    name='paciente_edad'
+                    name="paciente_edad"
                   />
                 </TabsContentContainer>
                 <TabsContentContainer>
@@ -153,7 +175,7 @@ const MedicalAppointmentForm = () => {
                     placeholder="Nacionalidad"
                     onChange={handleChange}
                     value={paciente_nacionalidad}
-                    name='paciente_nacionalidad'
+                    name="paciente_nacionalidad"
                   />
                 </TabsContentContainer>
                 <TabsContentContainer>
@@ -162,7 +184,7 @@ const MedicalAppointmentForm = () => {
                     placeholder="Numero de cédula"
                     onChange={handleChange}
                     value={paciente_cedula}
-                    name='paciente_cedula'
+                    name="paciente_cedula"
                   />
                 </TabsContentContainer>
                 <TabsContentContainer>
@@ -171,7 +193,7 @@ const MedicalAppointmentForm = () => {
                     placeholder="Genero del paciente"
                     onChange={handleChange}
                     value={paciente_genero}
-                    name='paciente_genero'
+                    name="paciente_genero"
                   />
                 </TabsContentContainer>
                 <TabsContentContainer>
@@ -180,7 +202,7 @@ const MedicalAppointmentForm = () => {
                     placeholder="Dirección del paciente"
                     onChange={handleChange}
                     value={paciente_direccion}
-                    name='paciente_direccion'
+                    name="paciente_direccion"
                   />
                 </TabsContentContainer>
                 <TabsContentContainer>
@@ -199,7 +221,7 @@ const MedicalAppointmentForm = () => {
                         placeholder="Nombre del solicitante"
                         onChange={handleChange}
                         value={solicitante_nombre}
-                        name='solicitante_nombre'
+                        name="solicitante_nombre"
                       />
                     </TabsContentContainer>
                     <TabsContentContainer>
@@ -208,7 +230,7 @@ const MedicalAppointmentForm = () => {
                         placeholder="Aprellido del solicitante"
                         onChange={handleChange}
                         value={solicitante_apellido}
-                        name='solicitante_apellido'
+                        name="solicitante_apellido"
                       />
                     </TabsContentContainer>
                   </>
@@ -216,6 +238,7 @@ const MedicalAppointmentForm = () => {
               </div>
             </TabsContent>
 
+            {/* Pestaña Diagnóstico */}
             <TabsContent value="diagnosis" columns={1}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 <TabsContentContainer>
@@ -224,91 +247,85 @@ const MedicalAppointmentForm = () => {
                     placeholder="Codigo de diagnóstico"
                     onChange={handleChange}
                     value={categoria_diagnostico}
-                    name='categoria_diagnostico'
+                    name="categoria_diagnostico"
                   />
                 </TabsContentContainer>
                 <TabsContentContainer>
-                  <Label htmlFor="descripcion_diagnostico">Descripcion del diagnóstico</Label>
+                  <Label htmlFor="descripcion_diagnostico">Descripción</Label>
                   <Input
-                    placeholder="Descripcion del diagnóstico"
+                    placeholder="Descripción del diagnóstico"
                     onChange={handleChange}
                     value={descripcion_diagnostico}
-                    name='descripcion_diagnostico'
+                    name="descripcion_diagnostico"
                   />
                 </TabsContentContainer>
                 <TabsContentContainer>
-                  <Label htmlFor="medicamento">Medicamentos</Label>
+                  <Label htmlFor="medicamento">Medicamento</Label>
                   <Input
-                    placeholder="Medicamentos"
+                    placeholder="Medicamentos recetados"
                     onChange={handleChange}
                     value={medicamento}
-                    name='medicamento'
-                  />
-                </TabsContentContainer>
-                <TabsContentContainer>
-                  <Label htmlFor="nombre_dispensario">Nombre de dispensario</Label>
-                  <Input
-                    placeholder="Nombre de dispensario"
-                    onChange={handleChange}
-                    value={nombre_dispensario}
-                    name='nombre_dispensario'
+                    name="medicamento"
                   />
                 </TabsContentContainer>
               </div>
             </TabsContent>
 
+            {/* Pestaña Facturación */}
             <TabsContent value="billing" columns={1}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 <TabsContentContainer>
+                  <Label htmlFor="nombre_dispensario">Nombre dispensario</Label>
+                  <Input
+                    placeholder="Nombre dispensario"
+                    onChange={handleChange}
+                    value={nombre_dispensario}
+                    name="nombre_dispensario"
+                  />
+                </TabsContentContainer>
+                <TabsContentContainer>
                   <Label htmlFor="afiliacion_ars">Afiliación ARS</Label>
                   <Input
-                    placeholder="¿Cual es su ARS?"
+                    placeholder="Afiliación ARS"
                     onChange={handleChange}
                     value={afiliacion_ars}
-                    name='afiliacion_ars'
+                    name="afiliacion_ars"
                   />
                 </TabsContentContainer>
                 <TabsContentContainer>
-                  <Label htmlFor="nss_o_contrato">Contrato</Label>
+                  <Label htmlFor="nss_o_contrato">NSS o contrato</Label>
                   <Input
-                    placeholder="Numero de contrato"
+                    placeholder="Número de contrato o NSS"
                     onChange={handleChange}
                     value={nss_o_contrato}
-                    name='nss_o_contrato'
+                    name="nss_o_contrato"
                   />
                 </TabsContentContainer>
                 <TabsContentContainer>
-                  <Label htmlFor="total_reclamaciones">Total reclamado</Label>
+                  <Label htmlFor="total_reclamaciones">Total de reclamaciones</Label>
                   <Input
-                    type="number"
-                    placeholder="0.00"
+                    placeholder="Total reclamaciones"
                     onChange={handleChange}
                     value={total_reclamaciones}
-                    name='total_reclamaciones'
+                    name="total_reclamaciones"
                   />
                 </TabsContentContainer>
                 <TabsContentContainer>
-                  <Label htmlFor="valor_reclamado">Monto a pagar</Label>
+                  <Label htmlFor="valor_reclamado">Valor reclamado</Label>
                   <Input
-                    type="number"
-                    placeholder="0.00"
+                    placeholder="Valor reclamado"
                     onChange={handleChange}
                     value={valor_reclamado}
-                    name='valor_reclamado'
+                    name="valor_reclamado"
                   />
                 </TabsContentContainer>
               </div>
             </TabsContent>
           </Tabs>
-
-          <CardFooter>
-            <Button className="outline">Cancelar</Button>
-            <Button
-              onClick={handleSubmit}
-              disabled={disabled}
-            >Guardar Cita</Button>
-          </CardFooter>
         </CardContent>
+        <CardFooter>
+          <Button onClick={handleSubmit} disabled={disabled}>Crear Cita</Button>
+        </CardFooter>
       </Card>
       <PreviousAppointments/>
     </div>
@@ -316,3 +333,8 @@ const MedicalAppointmentForm = () => {
 };
 
 export default MedicalAppointmentForm;
+
+
+       
+
+

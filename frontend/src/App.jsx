@@ -24,6 +24,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Navigation />}>
+      <Route path="/login" element={<Login />} />
         <Route
           index
           element={
@@ -40,7 +41,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/login" element={<Login />} />
       </Route>
     </Routes>
   );

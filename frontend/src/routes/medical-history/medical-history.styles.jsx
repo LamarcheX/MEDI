@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const MedicalHistoryWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 1rem 0;
+  padding: 1rem 10px;
   gap: 0.5rem;
   height: 88.83vh;
 

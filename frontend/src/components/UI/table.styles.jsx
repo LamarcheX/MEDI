@@ -3,8 +3,31 @@ import styled from "styled-components";
 export const TableWrapper = styled.div`
   margin: auto;
   overflow-y: auto;
+  overflow-x: hidden;
   position: relative;
-  max-height: 500px;
+  height: calc(100vh - 280px); // Ajusta esto según el espacio del header y otros elementos
+  min-height: 400px;
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+  }
+  
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 `;
 
 export const Table = styled.table`

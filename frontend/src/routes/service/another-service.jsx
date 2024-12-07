@@ -28,9 +28,9 @@ const ServiceRequestsTable = ({ serviceRequests = [], loading = false }) => {
   const [sortConfig, setSortConfig] = useState({ key: 'fecha', direction: 'desc' });
   const [expandedRows, setExpandedRows] = useState(new Set());
 
-  loading ?? <TripleSpinner />;
-
-  if (!serviceRequests || serviceRequests.length === 0) {
+  if (loading) {
+    return <TripleSpinner />;
+  } else if (!serviceRequests || serviceRequests.length === 0) {
     return (
       <Card>
         <CardContent>
@@ -106,8 +106,8 @@ const ServiceRequestsTable = ({ serviceRequests = [], loading = false }) => {
           </TableHeader>
           <tbody>
             {sortedRequests.map((request) => (
-              <Fragment key={request.id}>
-                <TableRow onClick={() => toggleRow(request.id)} open={expandedRows.has(request.id)} key={request.id}>
+              <Fragment key={request._id}>
+                <TableRow onClick={() => toggleRow(request._id)} open={expandedRows.has(request._id)} key={request._id}>
                   <TableCell>{request.fecha ? new Date(request.fecha).toLocaleDateString() : 'N/A'}</TableCell>
                   <TableCell>
                     <div>
@@ -140,7 +140,7 @@ const ServiceRequestsTable = ({ serviceRequests = [], loading = false }) => {
                         </Badge>
                         {request.objetado && <Badge variant="destructive">Objectedo</Badge>}
                       </BadgeWrapper>
-                      {expandedRows.has(request.id) ? (
+                      {expandedRows.has(request._id) ? (
                         <ChevronUp size={20} />
                       ) : (
                         <ChevronDown size={20} />
@@ -148,7 +148,7 @@ const ServiceRequestsTable = ({ serviceRequests = [], loading = false }) => {
                     </span>
                   </TableCell>
                 </TableRow>
-                {expandedRows.has(request.id) && (
+                {expandedRows.has(request._id) && (
                   <ExpandableRow>
                     <ExpandedContentCell colSpan={6}>
                       <InfoSection>

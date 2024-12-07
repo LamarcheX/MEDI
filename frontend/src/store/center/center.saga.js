@@ -88,5 +88,5 @@ export function* centerSagas() {
         call(onLoginCenterStart),
         call(onLogoutCenterStart),
         call(onCreateCenterStart),
-    ]);
+    ]);
 }
