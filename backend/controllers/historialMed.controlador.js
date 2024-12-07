@@ -2,21 +2,109 @@ require("../config/db");
 const historialModel = require("../models/historial.model");
 
 const getHistorial = async (req, res) => {
+  const {
+    page = 1,
+    limit = 10,
+    sortBy = 'fechaCreacion',
+    sortOrder = 'desc',
+    search = ''
+  } = req.query;
+
   try {
-    const historialClinicoBD = await historialModel.find();
-    res.status(200).send(historialClinicoBD);
+    const searchQuery = search
+      ? {
+        $or: [
+          { nombrePaciente: { $regex: search, $options: 'i' } },
+          { diagnostico: { $regex: search, $options: 'i' } }
+        ]
+      }
+      : {};
+
+    const sortOptions = { [sortBy]: sortOrder === 'desc' ? -1 : 1 };
+    const skip = (page - 1) * limit;
+
+    const historialClinicoBD = await historialModel
+      .find(searchQuery)
+      .sort(sortOptions)
+      .skip(skip)
+      .limit(Number(limit))
+      .lean();
+
+    const totalDocuments = await historialModel.countDocuments(searchQuery);
+    const totalPages = Math.ceil(totalDocuments / limit);
+    const currentPage = Number(page);
+
+    const response = {
+      data: historialClinicoBD,
+      pagination: {
+        totalDocuments,
+        totalPages,
+        currentPage,
+        pageSize: limit,
+        hasNextPage: currentPage < totalPages,
+        hasPrevPage: currentPage > 1
+      }
+    };
+    
+    res.status(200).send(response);
   } catch (error) {
     res.status(500).send({ error: error.message });
   }
 };
 
 const getHistorialPorCentro = async (req, res) => {
-  const idCentro = req.params.idCentro;
+  const { idCentro } = req.params;
+  const {
+    page = 1,
+    limit = 10,
+    sortBy = 'fechaCreacion',
+    sortOrder = 'desc',
+    search = ''
+  } = req.query;
+
   try {
-    const historialClinicoBD = await historialModel.find({ idCentro });
-    res.status(200).send(historialClinicoBD);
+    const searchQuery = search ? {
+      $or: [
+        { nombrePaciente: { $regex: search, $options: 'i' } },
+        { diagnostico: { $regex: search, $options: 'i' } }
+      ]
+    } : {};
+
+    const combinedFilter = {
+      idCentro,
+      ...searchQuery
+    };
+
+    const sortOptions = { [sortBy]: sortOrder === 'desc' ? -1 : 1 };
+    const skip = (page - 1) * limit;
+
+    const historialClinicoBD = await historialModel
+      .find(combinedFilter)
+      .sort(sortOptions)
+      .skip(skip)
+      .limit(Number(limit))
+      .lean();
+
+    const totalDocuments = await historialModel.countDocuments(combinedFilter);
+    const totalPages = Math.ceil(totalDocuments / limit);
+    const currentPage = Number(page);
+
+    res.status(200).json({
+      data: historialClinicoBD,
+      pagination: {
+        totalDocuments,
+        totalPages,
+        currentPage,
+        pageSize: limit,
+        hasNextPage: currentPage < totalPages,
+        hasPrevPage: currentPage > 1
+      }
+    });
   } catch (error) {
-    res.status(500).send({ error: error.message });
+    res.status(500).json({
+      error: error.message,
+      details: 'Error al obtener el historial por centro'
+    });
   }
 };
 
@@ -35,6 +123,7 @@ const getOneHistorial = async (req, res) => {
 
 const addHistorial = async (req, res) => {
   const historial = new historialModel(req.body);
+  console.log(historial);
 
   try {
     await historial.save();

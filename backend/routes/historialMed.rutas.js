@@ -16,11 +16,11 @@ router.get("/api/historial-clinico/:id", getOneHistorial);
 
 router.post("/api/historial-clinico", addHistorial);
 
+router.get("/api/historial-clinico/byCenter/:idCentro", getHistorialPorCentro);
+
 router.patch("/api/historial-clinico/:id", updateHistorial);
 
 router.delete("/api/historial-clinico/:id", deleteHistorial);
-
-router.get("/api/historial-clinico/centro/:idCentro", getHistorialPorCentro);
 
 // router.use(authMiddleware);
 
