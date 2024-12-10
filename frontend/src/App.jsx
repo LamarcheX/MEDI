@@ -23,8 +23,11 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/" element={<Navigation />}>
+      {/* Ruta de Login fuera del Navigation */}
       <Route path="/login" element={<Login />} />
+      
+      {/* Rutas que incluyen Navigation */}
+      <Route path="/" element={<Navigation />}>
         <Route
           index
           element={
@@ -34,7 +37,7 @@ function App() {
           }
         />
         <Route
-          path='/medical-history'
+          path="/medical-history"
           element={
             <ProtectedRoute>
               <MedicalHistory />
