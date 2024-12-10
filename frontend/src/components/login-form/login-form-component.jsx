@@ -13,7 +13,7 @@ import {
   TabsTrigger,
   TabsContent,
   TabsContentContainer,
-  LoginGlobalStyle
+  LoginGlobalStyle,
 } from './login-form-styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { createCenterStart, loginCenterStart } from '../../store/center/center.action';
@@ -78,7 +78,7 @@ const LoginForm = () => {
   return (
     <>
       <LoginGlobalStyle />
-      <LoginContainer currentTab={currentTab}>
+      <LoginContainer $currentTab={currentTab}>
         <div className="form-container">
           <FormPanel>
             <Card>
@@ -88,13 +88,13 @@ const LoginForm = () => {
               <CardContent>
                 <TabsList>
                   <TabsTrigger
-                    active={currentTab === 'login'}
+                    $active={currentTab === 'login'}
                     onClick={() => setCurrentTab('login')}
                   >
-                    Iniciar Sesion
+                    Iniciar Sesión
                   </TabsTrigger>
                   <TabsTrigger
-                    active={currentTab === 'register'}
+                    $active={currentTab === 'register'}
                     onClick={() => setCurrentTab('register')}
                   >
                     Registrar Usuario
@@ -102,66 +102,70 @@ const LoginForm = () => {
                 </TabsList>
 
                 {/* Login Tab */}
-                <TabsContent active={currentTab === 'login'}>
-                  <TabsContentContainer>
-                    <Label htmlFor="usuario">Usuario</Label>
-                    <Input
-                      id="usuario"
-                      type="text"
-                      name="usuario"
-                      placeholder="Username"
-                      value={loginFormData.usuario}
-                      onChange={handleLoginChange}
-                      required
-                    />
-                  </TabsContentContainer>
-                  <TabsContentContainer>
-                    <Label htmlFor="contraseña">Contraseña</Label>
-                    <Input
-                      id="contraseña"
-                      type="password"
-                      name="contraseña"
-                      placeholder="Password"
-                      value={loginFormData.contraseña}
-                      onChange={handleLoginChange}
-                      required
-                    />
-                  </TabsContentContainer>
-                  <CardFooter>
-                    <Button onClick={handleLoginSubmit}>Acceder</Button>
-                  </CardFooter>
-                </TabsContent>
+                {currentTab === 'login' && (
+                  <form onSubmit={handleLoginSubmit}>
+                    <TabsContentContainer>
+                      <Label htmlFor="login-usuario">Usuario</Label>
+                      <Input
+                        id="login-usuario"
+                        type="text"
+                        name="usuario"
+                        placeholder="Username"
+                        value={loginFormData.usuario}
+                        onChange={handleLoginChange}
+                        required
+                      />
+                    </TabsContentContainer>
+                    <TabsContentContainer>
+                      <Label htmlFor="login-contraseña">Contraseña</Label>
+                      <Input
+                        id="login-contraseña"
+                        type="password"
+                        name="contraseña"
+                        placeholder="Password"
+                        value={loginFormData.contraseña}
+                        onChange={handleLoginChange}
+                        required
+                      />
+                    </TabsContentContainer>
+                    <CardFooter>
+                      <Button type="submit">Acceder</Button>
+                    </CardFooter>
+                  </form>
+                )}
 
                 {/* Register Tab */}
-                <TabsContent active={currentTab === 'register'}>
-                  <TabsContentContainer>
-                    <Label htmlFor="centro">Hospital/Center</Label>
-                    <Input
-                      id="centro"
-                      type="text"
-                      name="usuario"
-                      placeholder="Center"
-                      value={registerFormData.usuario}
-                      onChange={handleRegisterChange}
-                      required
-                    />
-                  </TabsContentContainer>
-                  <TabsContentContainer>
-                    <Label htmlFor="contraseña">Password</Label>
-                    <Input
-                      id="contraseña"
-                      type="password"
-                      name="contraseña"
-                      placeholder="Password"
-                      value={registerFormData.contraseña}
-                      onChange={handleRegisterChange}
-                      required
-                    />
-                  </TabsContentContainer>
-                  <CardFooter>
-                    <Button onClick={handleRegisterSubmit}>Crear cuenta</Button>
-                  </CardFooter>
-                </TabsContent>
+                {currentTab === 'register' && (
+                  <form onSubmit={handleRegisterSubmit}>
+                    <TabsContentContainer>
+                      <Label htmlFor="register-usuario">Hospital/Center</Label>
+                      <Input
+                        id="register-usuario"
+                        type="text"
+                        name="usuario"
+                        placeholder="Center"
+                        value={registerFormData.usuario}
+                        onChange={handleRegisterChange}
+                        required
+                      />
+                    </TabsContentContainer>
+                    <TabsContentContainer>
+                      <Label htmlFor="register-contraseña">Password</Label>
+                      <Input
+                        id="register-contraseña"
+                        type="password"
+                        name="contraseña"
+                        placeholder="Password"
+                        value={registerFormData.contraseña}
+                        onChange={handleRegisterChange}
+                        required
+                      />
+                    </TabsContentContainer>
+                    <CardFooter>
+                      <Button type="submit">Crear cuenta</Button>
+                    </CardFooter>
+                  </form>
+                )}
               </CardContent>
             </Card>
           </FormPanel>
