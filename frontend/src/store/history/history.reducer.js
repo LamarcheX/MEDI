@@ -16,18 +16,19 @@ const historyReducer = (state = INITIAL_STATE, action) => {
     const { data, pagination } = payload || {};
 
     switch (type) {
-        case HISTORY_ACTION_TYPES.CREATE_HISTORY_START:
         case HISTORY_ACTION_TYPES.GET_HISTORY_START:
         case HISTORY_ACTION_TYPES.GET_HISTORY_BY_CENTER_START:
         case HISTORY_ACTION_TYPES.UPDATE_HISTORY_START:
         case HISTORY_ACTION_TYPES.DELETE_HISTORY_START:
             return { ...state, errorMessage: null, isLoading: true, history: [] };
+        case HISTORY_ACTION_TYPES.CREATE_HISTORY_START:
+            return { ...state, errorMessage: null, isLoading: true };
         case HISTORY_ACTION_TYPES.CREATE_HISTORY_SUCCESS:
             return {
                 ...state,
                 errorMessage: null,
                 isLoading: false,
-                history: [payload, ...state.history],
+                history: [...state.history, payload],
             };
         case HISTORY_ACTION_TYPES.GET_HISTORY_SUCCESS:
             return {

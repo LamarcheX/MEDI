@@ -1,5 +1,5 @@
 import { takeLatest, call, put, all } from "redux-saga/effects";
-import { CITAS_ACTION_TYPES } from "./cita.types";
+import { CITA_ACTION_TYPES } from "./cita.types";
 
 import {
     createCitaSuccess,
@@ -22,9 +22,9 @@ import {
     deleteCita,
 } from "../../utils/db/cita";
 
-export function* getCitasStart() {
+export function* getCitasStart(payload) {
     try {
-        const citas = yield call(getAllCitas);
+        const citas = yield call(getAllCitas, payload.payload);
         yield put(getCitasSuccess(citas));
     } catch (error) {
         yield put(getCitasFailed(error.message));
@@ -50,6 +50,7 @@ export function* createCitaStart({ payload: cita }) {
 };
 
 export function* updateCitaStart({ payload: cita }) {
+    console.log("Cita a actualizar:", cita);
     try {
         const updatedCita = yield call(updateCita, cita);
         yield put(updateCitaSuccess(updatedCita));
@@ -68,23 +69,23 @@ export function* deleteCitaStart({ payload: citaId }) {
 };
 
 export function* onGetCitasStart() {
-    yield takeLatest(CITAS_ACTION_TYPES.GET_CITAS_START, getCitasStart);
+    yield takeLatest(CITA_ACTION_TYPES.GET_CITAS_START, getCitasStart);
 };
 
 export function* onGetCitaByIdStart() {
-    yield takeLatest(CITAS_ACTION_TYPES.GET_CITA_BY_ID_START, getCitaByIdStart);
+    yield takeLatest(CITA_ACTION_TYPES.GET_CITA_BY_ID_START, getCitaByIdStart);
 };
 
 export function* onCreateCitaStart() {
-    yield takeLatest(CITAS_ACTION_TYPES.CREATE_CITA_START, createCitaStart);
+    yield takeLatest(CITA_ACTION_TYPES.CREATE_CITA_START, createCitaStart);
 };
 
 export function* onUpdateCitaStart() {
-    yield takeLatest(CITAS_ACTION_TYPES.UPDATE_CITA_START, updateCitaStart);
+    yield takeLatest(CITA_ACTION_TYPES.UPDATE_CITA_START, updateCitaStart);
 };
 
 export function* onDeleteCitaStart() {
-    yield takeLatest(CITAS_ACTION_TYPES.DELETE_CITA_START, deleteCitaStart);
+    yield takeLatest(CITA_ACTION_TYPES.DELETE_CITA_START, deleteCitaStart);
 };
 
 export function* citaSagas() {

@@ -14,7 +14,7 @@ export const selectCita = createSelector(
 
 export const selectCitaErrorMessage = createSelector(
     [selectCitaReducer],
-    cita => cita.errorMessage
+    (cita) => cita.errorMessage
 );
 
 export const selectIsCitaLoading = createSelector(

@@ -5,6 +5,7 @@ const historialMedRouter = require("./routes/historialMed.rutas");
 const usuarioRouter = require("./routes/usuario.rutas");
 const centrosRouter = require("./routes/centro.ruta");
 const cors = require("cors");
+const { EnvConfig } = require("./env");
 
 require("dotenv").config();
 require("./config/db");
@@ -21,7 +22,6 @@ app.use(citasRouter);
 app.use(historialMedRouter);
 app.use(centrosRouter);
 
-const serverPort = process.env.SERVER_PORT;
-app.listen(serverPort, () => {
-  console.log(`Servidor corriendo en puerto ${serverPort}`);
+app.listen(EnvConfig().port, () => {
+  console.log(`Servidor corriendo en puerto ${EnvConfig().port}`);
 });

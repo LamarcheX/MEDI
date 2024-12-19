@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const Centro = require("../models/centro.model");
+const { EnvConfig } = require("../env");
 require("../config/db");
 
 /**
@@ -11,8 +12,6 @@ require("../config/db");
  * @returns {Promise<void>} - Devuelve una promesa que resuelve en una respuesta HTTP con un mensaje de error o una redirección a la página de inicio de sesión si la sesión no está activada.
  */
 
-const jwtSecret = process.env.JWT_SECRET;
-
 const authMiddleware = async (req, res, next) => {
   try {
     const token = req.header('Authorization')?.replace('Bearer ', '');
@@ -20,7 +19,7 @@ const authMiddleware = async (req, res, next) => {
       throw new Error('Token no proporcionado');
     }
 
-    const decoded = jwt.verify(token, jwtSecret);
+    const decoded = jwt.verify(token, EnvConfig().jwtSecret);
 
     const center = await Centro.findOne({
       _id: decoded._id,

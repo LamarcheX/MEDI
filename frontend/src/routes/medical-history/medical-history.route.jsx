@@ -69,7 +69,8 @@ const MedicalHistory = () => {
     const handleSubmission = (data) => {
         const historyData = {
             ...data,
-            idCentro: center._id
+            idCentro: center._id,
+            nombreDeDispensario: center.nombre,
         };
         dispatch(createHistoryStart({ history: historyData }));
     };
@@ -92,7 +93,7 @@ const MedicalHistory = () => {
                 serviceRequests={filteredRequests}
                 loading={isLoading}
             />
-            {totalResults < 1 &&
+            {totalPages > 1 &&
                 <Pagination
                     currentPage={currentPage}
                     totalPages={totalPages}

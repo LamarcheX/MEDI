@@ -22,7 +22,7 @@ const Navigation = () => {
     return (
         <Fragment>
             <NavigationContainer>
-                <NavigationLogo>
+                <NavigationLogo to={"/"}>
                     <NavigationLogoImage src="https://pastoraldelasaludrd.com/images/Logos/PASTORAL1.png" />
                 </NavigationLogo>
                 <NavigationList>

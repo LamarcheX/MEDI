@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { EnvConfig } = require("../env");
 require("dotenv").config();
 
 /**
@@ -6,11 +7,10 @@ require("dotenv").config();
  * **Nota:** En el archivo .env, debes configurar las variables de entorno de
  * la base de datos.
  */
-const url = process.env.ATLAS_URL;
 
 try {
-  mongoose.connect(url);
+  mongoose.connect(EnvConfig().atlasUrl);
   console.log("MongoDb corriendo");
 } catch (error) {
-  console.error();
+  console.error(error);
 }

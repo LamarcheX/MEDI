@@ -17,7 +17,7 @@ const AddServiceRequestModal = ({ isOpen, onClose, onSubmit }) => {
         genero, solicitante, nombreSolicitante,
         direccion, tipoDePaciente, afiliacionArs,
         categoriaDiagnostico, descripcionDiagnostico,
-        medicamento, nombreDeDispensario, provincia,
+        medicamento, provincia,
         observacion, nssOContrato, noAutorizacion,
         valorReclamado, totalDeReclamaciones, revisado,
         validFact, objetado
@@ -25,10 +25,43 @@ const AddServiceRequestModal = ({ isOpen, onClose, onSubmit }) => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value
-        });
+
+        // Definir los campos que deben ser convertidos a números
+        const numericFields = ["valorReclamado", "totalDeReclamaciones", "edad", "ano"];
+
+        // Definir los campos que deben ser convertidos a booleanos
+        const booleanFields = ["padresDivorciados", "fiscalia", "embarazadas", "revisado", "validFact", "objetado"];
+
+        let newValue = value;
+
+        // Convertir a número si el campo está en numericFields
+        if (numericFields.includes(name)) {
+            newValue = value === '' ? 0 : parseInt(value);
+        }
+
+        // Convertir a booleano si el campo está en booleanFields
+        if (booleanFields.includes(name)) {
+            newValue = value === 'true' || value === true;
+        }
+
+        // Si el campo es fecha, extraer el año y el mes
+        if (name === 'fecha') {
+            const date = new Date(value);
+            const ano = date.getFullYear();
+            const mes = date.toLocaleString('default', { month: 'long' });
+
+            setFormData(prev => ({
+                ...prev,
+                [name]: value,
+                ano,
+                mes
+            }));
+        } else {
+            setFormData(prev => ({
+                ...prev,
+                [name]: newValue
+            }));
+        }
     };
 
     const handleToggle = (field) => () => {
@@ -37,9 +70,13 @@ const AddServiceRequestModal = ({ isOpen, onClose, onSubmit }) => {
             [field]: !prevState[field],
         }));
     };
-    
+
     const submitForm = () => {
-        onSubmit(formData);
+        const submitFormData = {
+            ...formData,
+        };
+
+        onSubmit(submitFormData);
         onClose();
         // setFormData(defaultFormFields);
     };
@@ -193,18 +230,6 @@ const AddServiceRequestModal = ({ isOpen, onClose, onSubmit }) => {
                                     />
                                 </TabsContentContainer>
                                 <TabsContentContainer>
-                                    <Label htmlFor={"nombreDeDispensario"}>Nombre de Dispensario</Label>
-                                    <Input
-                                        id={"nombreDeDispensario"}
-                                        name={"nombreDeDispensario"}
-                                        placeholder='Nombre de Dispensario'
-                                        value={nombreDeDispensario}
-                                        onChange={handleChange}
-                                    />
-                                </TabsContentContainer>
-                            </TabsColumnItem>
-                            <TabsColumnItem>
-                                <TabsContentContainer>
                                     <Label htmlFor={"categoriaDiagnostico"}>Categoria de Diagnostico</Label>
                                     <Input
                                         id={"categoriaDiagnostico"}
@@ -214,6 +239,8 @@ const AddServiceRequestModal = ({ isOpen, onClose, onSubmit }) => {
                                         onChange={handleChange}
                                     />
                                 </TabsContentContainer>
+                            </TabsColumnItem>
+                            <TabsColumnItem>
                                 <TabsContentContainer>
                                     <Label htmlFor={"descripcionDiagnostico"}>Descripcion de Diagnostico</Label>
                                     <Input

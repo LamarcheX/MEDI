@@ -1,25 +1,12 @@
-/**
- * Módulo de controlador para el módulo de gestión de citas en una aplicación de gestión de consultorios médicos.
- * @module citaController
- */
-
 const CitaModel = require("../models/cita.model");
-const UsuarioModel = require("../models/usuario.model");
-const mongoose = require("mongoose");
 require("../config/db");
-const { ObjectId } = require("mongodb");
 
 /**
  * Objeto que contiene los controladores para el módulo de gestión de citas.
  * @namespace controller
  */
-const controller = {};
 
-/**
- * Número máximo de citas permitidas por día.
- * @constant {number}
- */
-const CITASMAX = 8;
+const controller = {};
 
 /**
  * Controlador para obtener la lista de citas.
@@ -30,18 +17,52 @@ const CITASMAX = 8;
  * @returns {Promise<void>} - Devuelve una promesa que resuelve en un objeto JSON con la lista de citas o un objeto JSON con el error.
  */
 controller.citas = async (req, res) => {
-  const citas = await CitaModel.find();
+  const {
+    page = 1,
+    limit = 10,
+    sortBy = "fecha",
+    sortOrder = "asc",
+    search = "",
+  } = req.query;
+
   try {
-    if (!citas) {
-      return res.status(404).send({ msg: "Cita no encontrada" });
-    } else {
-      res.status(200).json(citas);
-    }
+    const searchQuery = search ? {
+      $or: [
+        { especialista: { $regex: search, $options: "i" } },
+        { centro_nombre: { $regex: search, $options: "i" } },
+        { paciente_nombre: { $regex: search, $options: "i" } },
+      ]
+    } : {};
+
+    const sortOptions = { [sortBy]: sortOrder === "desc" ? -1 : 1 };
+    const skip = (page - 1) * limit;
+
+    const citas = await CitaModel
+      .find(searchQuery)
+      .sort(sortOptions)
+      .skip(skip)
+      .limit(Number(limit))
+      .lean();
+
+    const totalDocuments = await CitaModel.countDocuments(searchQuery);
+    const totalPages = Math.ceil(totalDocuments / limit);
+    const currentPage = Number(page);
+
+    const response = {
+      data: citas,
+      pagination: {
+        totalDocuments,
+        totalPages,
+        currentPage,
+        pageSize: limit,
+        hasNextPage: currentPage < totalPages,
+        hasPrevPage: currentPage > 1,
+      },
+    };
+
+    res.status(200).send(response);
   } catch (error) {
-    res
-      .status(500)
-      // const errors = controlDeErrores(error);
-      .send(`${error} ---> citas no encontrada`);
+    res.status(500).send({ error: error, message: "citas no encontrada" });
   }
 };
 
@@ -54,29 +75,66 @@ controller.citas = async (req, res) => {
  * @returns {Promise<void>} - Devuelve una promesa que resuelve en un objeto JSON con la lista de citas o un objeto JSON con el error.
  */
 controller.citasCentro = async (req, res) => {
-  const centroBuscado = req.query.centro;
-  console.log(`parametro del query: ${centroBuscado}`);
+  const { idCentro } = req.params;
+  const {
+    page = 1,
+    limit = 10,
+    sortBy = "fecha",
+    sortOrder = "asc",
+    search = "",
+  } = req.query;
+
   try {
-    if (!centroBuscado) {
-      return res.status(400).json({
-        message: "El nombre del centro es necesario para la búsqueda",
-      });
+    if (!idCentro) {
+      return res.status(400).send({ message: "El nombre del centro es necesario para la búsqueda" });
     }
 
-    const citas = await CitaModel.find({ centro_nombre: `${centroBuscado}` });
+    const searchQuery = search ? {
+      $or: [
+        { especialista: { $regex: search, $options: "i" } },
+        { centro_nombre: { $regex: search, $options: "i" } },
+        { paciente_nombre: { $regex: search, $options: "i" } },
+      ]
+    } : {};
+
+    const combinedFilter = {
+      idCentro,
+      ...searchQuery,
+    };
+
+    const sortOptions = { [sortBy]: sortOrder === "desc" ? -1 : 1 };
+    const skip = (page - 1) * limit;
+
+    const citas = await CitaModel
+      .find(combinedFilter)
+      .sort(sortOptions)
+      .skip(skip)
+      .limit(Number(limit))
+      .lean();
+    
+    const totalDocuments = await CitaModel.countDocuments(combinedFilter);
+    const totalPages = Math.ceil(totalDocuments / limit);
+    const currentPage = Number(page);
+
+    const response = {
+      data: citas,
+      pagination: {
+        totalDocuments,
+        totalPages,
+        currentPage,
+        pageSize: limit,
+        hasNextPage: currentPage < totalPages,
+        hasPrevPage: currentPage > 1,
+      }
+    };
 
     if (!citas || citas.length === 0) {
-      return res
-        .status(404)
-        .json({ mensaje: `No se encontraron citas para ${centroBuscado}` });
+      return res.status(404).send({ mensaje: `No se encontraron citas para este centro` });
     }
 
-    return res.status(200).json(citas);
+    res.status(200).send(response);
   } catch (error) {
-    res
-      .status(500)
-      // const errors = controlDeErrores(error);
-      .send(`${error} ---> Error al buscar el centro: ${centroBuscado}`);
+    res.status(500).send({ error, message: "Error al buscar el centro" });
   }
 };
 

@@ -45,7 +45,7 @@ const getHistorial = async (req, res) => {
         hasPrevPage: currentPage > 1
       }
     };
-    
+
     res.status(200).send(response);
   } catch (error) {
     res.status(500).send({ error: error.message });
@@ -63,6 +63,10 @@ const getHistorialPorCentro = async (req, res) => {
   } = req.query;
 
   try {
+    if (!idCentro) {
+      return res.status(400).send({ error: 'ID de centro es requerido' });
+    }
+    
     const searchQuery = search ? {
       $or: [
         { nombrePaciente: { $regex: search, $options: 'i' } },
@@ -89,7 +93,7 @@ const getHistorialPorCentro = async (req, res) => {
     const totalPages = Math.ceil(totalDocuments / limit);
     const currentPage = Number(page);
 
-    res.status(200).json({
+    const response = {
       data: historialClinicoBD,
       pagination: {
         totalDocuments,
@@ -99,7 +103,9 @@ const getHistorialPorCentro = async (req, res) => {
         hasNextPage: currentPage < totalPages,
         hasPrevPage: currentPage > 1
       }
-    });
+    };
+
+    res.status(200).send(response);
   } catch (error) {
     res.status(500).json({
       error: error.message,
@@ -122,14 +128,29 @@ const getOneHistorial = async (req, res) => {
 };
 
 const addHistorial = async (req, res) => {
-  const historial = new historialModel(req.body);
-  console.log(historial);
-
   try {
+    // Convert fecha to Date object if it's a string
+    if (req.body.fecha && typeof req.body.fecha === 'string') {
+      req.body.fecha = new Date(req.body.fecha);
+    }
+
+    // Ensure fiscalia is a boolean
+    req.body.fiscalia = req.body.fiscalia ?? false;
+
+    const historial = new historialModel(req.body);
     await historial.save();
     res.status(201).send(historial);
   } catch (error) {
-    res.status(500).send({ error: error.message });
+    console.error('Detailed Mongoose Error:', {
+      message: error.message,
+      name: error.name,
+      errors: error.errors
+    });
+    res.status(500).send({
+      error: 'Failed to create historical record',
+      details: error.message,
+      validationErrors: error.errors
+    });
   }
 };
 
